@@ -37,8 +37,8 @@ public class UtenteService {
                 .orElseThrow(() -> new NotFoundException(id));
     }
 
-    public TipoUtente findByTipo(String tipo) {
-        return tipoUtenteRepository.findByTipoUtente(EnumTipoUtente.valueOf(tipo)).orElseThrow(() -> new NotFoundException(tipo));
+    public TipoUtente findByTipoUtente(String tipoUtente) {
+        return tipoUtenteRepository.findByTipoUtente(EnumTipoUtente.valueOf(tipoUtente)).orElseThrow(() -> new NotFoundException(tipoUtente));
     }
 
     public Utente findByEmail(String email) {
@@ -49,7 +49,7 @@ public class UtenteService {
     public Utente saveUtente(UtentiDTO payload) {
         // TODO: aggiungere controlli su esistenza utente
 
-        TipoUtente tipo = this.findByTipo(payload.tipoUtente());
+        TipoUtente tipoUtente = this.findByTipoUtente(payload.tipoUtente());
 
         Utente nuovoUtente = new Utente(
                 payload.username(),
@@ -57,7 +57,7 @@ public class UtenteService {
                 passwordEncoder.encode(payload.password()),
                 payload.nome(),
                 payload.cognome(),
-                tipo
+                tipoUtente
         );
 
         return utenteRepository.save(nuovoUtente);
