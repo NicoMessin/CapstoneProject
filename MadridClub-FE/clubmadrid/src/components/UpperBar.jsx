@@ -5,6 +5,7 @@ import "../css/General.css";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function UpperBar() {
     const navigate = useNavigate();
@@ -40,15 +41,39 @@ function UpperBar() {
   <Col xs={4} md={4} className="d-flex justify-content-end align-items-center">
 
     {/* Mobile */}
-    <i className="bi bi-person-fill fs-3 d-block d-md-none"></i>
+  
+<Dropdown className="d-block d-md-none">
+      <Dropdown.Toggle  id="dropdown-basic"  variant="secondary">
+             <i className="bi bi-person-fill fs-3 mx-3"></i>
+      </Dropdown.Toggle>
 
+      <Dropdown.Menu>
+        <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
+        <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
+        <Dropdown.Item href="/Profile">Profile</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
     {/* Desktop */}
     <div className="d-none d-md-flex align-items-center">
       <img src="/images/Logo_Adidas.png" alt="logoAdidas" className="mx-3 adidasLogo" />
       <img src="/images/emirates-logo.png" alt="logoEmirates" className="mx-3 emiratesLogo" />
-      <i className="bi bi-person-fill fs-3 mx-3"></i>
+     <Dropdown>
+      <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+             <i className="bi bi-person-fill fs-3 mx-3"></i>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+         <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
+        <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
+        <Dropdown.Item href="/Profile">Profile</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
       <i className="bi bi-gear text-black settings-btn fs-3  mx-3"></i>
     </div>
+
+ 
+
+
 
   </Col>
 

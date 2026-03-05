@@ -31,14 +31,14 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer "))
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) //deve iniziare con Baerer
             throw new UnauthorizedException("Sembra tu abbia perso la tua chiave d'accesso. Cerca nelle tasche!");
-        String accessToken = authHeader.replace("Bearer ", "");
-        jwtTools.verifyToken(accessToken);
+        String accessToken = authHeader.replace("Bearer ", ""); //rimuovo la parola baerer per avere solo JWT
+        jwtTools.verifyToken(accessToken); //controllo firma scadenza e integrità
 
         // verify authorization
-        Utente authUtente = this.utenteService.findById(jwtTools.getId(accessToken));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authUtente, null, authUtente.getAuthorities());
+        Utente authUtente = this.utenteService.findById(jwtTools.getId(accessToken)); //carico l'utente ed estraggo UUID
+        Authentication authentication = new UsernamePasswordAuthenticationToken(authUtente, null, authUtente.getAuthorities()); //oggetti per sapere i ruoli
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //*************************************
         filterChain.doFilter(request, response);
@@ -46,6 +46,6 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return new AntPathMatcher().match("/auth/**", request.getServletPath());
+        return new AntPathMatcher().match("/auth/**", request.getServletPath()); //su questa rotta non va controllato il token perchè chiunque deveentrare senza essere autenticato
     }
 }

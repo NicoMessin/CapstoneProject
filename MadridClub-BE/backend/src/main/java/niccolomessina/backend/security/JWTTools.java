@@ -20,14 +20,14 @@ public class JWTTools {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
-                .subject(String.valueOf(utente.getId()))
-                .claim("role", String.valueOf(utente.getRuolo()))
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .subject(String.valueOf(utente.getId())) //aggiungo id come identificatore
+                .claim("role", String.valueOf(utente.getRuolo())) //aggiungo informazione personalizzata (ruolo)
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes())) // token firmato con la chiave segreta e impossibile da modificare
                 .compact();
     }
 
     public void verifyToken(String token) {
-        try {
+        try { // controllo firma valida, non scaduto o modificato
             Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
         } catch (Exception ex) {
             throw new UnauthorizedException("Qualcosa non ha funzionato, prova di nuovo.");
