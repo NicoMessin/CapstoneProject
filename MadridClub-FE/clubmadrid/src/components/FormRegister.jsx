@@ -20,7 +20,7 @@ function FormRegister() {
       password,
       nome,
       cognome,
-      tipoUtente: "USER" // imposto ruolo USER
+      tipoUtente: "USER" 
     };
 
     fetch("http://localhost:3001/auth/register", {
@@ -30,10 +30,10 @@ function FormRegister() {
     })
     .then(res => {
   if (!res.ok) throw new Error("Errore nella registrazione");
-  return res.json(); // <- qui prende il JSON dal backend
+  return res.json(); 
 })
 .then(data => {
-  console.log(data); // puoi vedere l’utente creato
+  console.log(data); 
   alert("Registrazione effettuata! Ora puoi fare login.");
   navigate('/')
 })

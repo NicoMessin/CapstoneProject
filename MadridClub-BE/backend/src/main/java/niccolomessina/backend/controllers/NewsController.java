@@ -3,18 +3,19 @@ package niccolomessina.backend.controllers;
 import niccolomessina.backend.entities.News;
 import niccolomessina.backend.payloads.NewsDTO;
 import niccolomessina.backend.services.NewsService;
-import lombok.extern.slf4j.Slf4j;
+import niccolomessina.backend.entities.Utente; // se hai un Utente simile al FattureController
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/news")
-@Slf4j
+@RequestMapping("/news")
 public class NewsController {
 
     private final NewsService newsService;
@@ -23,38 +24,38 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    // GET /api/news → lista tutte le news
-    @GetMapping
-    public ResponseEntity<List<News>> getAllNews() {
-        log.info("Chiamata GET /api/news");
-        List<News> newsList = newsService.getAllNews();
-        return ResponseEntity.ok(newsList);
+    // GET /news → lista tutte le news (USER e ADMIN)
+    @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public List<News> getAllNews() {
+        return newsService.getAllNews();
     }
 
-    // GET /api/news/{id} → recupera news per ID
+    // GET /news/{id} → recupera news per ID (USER e ADMIN)
     @GetMapping("/{id}")
-    public ResponseEntity<News> getNewsById(@PathVariable UUID id) {
-        log.info("Chiamata GET /api/news/{}", id);
-        News news = newsService.getNewsById(id);
-        if (news == null) {
-            return ResponseEntity.notFound().build();
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public News getNewsById(@PathVariable UUID id) {
+        return newsService.getNewsById(id);
+    }
+
+    // POST /news → crea nuova news (solo ADMIN)
+    @PostMapping("")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public News createNews(@RequestBody @Validated NewsDTO newsDTO,
+                           BindingResult validation,
+                           @AuthenticationPrincipal Utente utente) {
+        if (validation.hasErrors()) {
+            throw new IllegalArgumentException("Errore nei dati della news");
         }
-        return ResponseEntity.ok(news);
+        return newsService.createNews(newsDTO);
     }
 
-    // POST /api/news → crea nuova news
-    @PostMapping
-    public ResponseEntity<News> createNews(@Validated @RequestBody NewsDTO newsDTO) {
-        log.info("Chiamata POST /api/news con titolo: {}", newsDTO.title());
-        News created = newsService.createNews(newsDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
-
-    // DELETE /api/news/{id} → elimina news
+    // DELETE /news/{id} → elimina news (solo ADMIN)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNews(@PathVariable UUID id) {
-        log.info("Chiamata DELETE /api/news/{}", id);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNews(@PathVariable UUID id) {
         newsService.deleteNews(id);
-        return ResponseEntity.noContent().build();
     }
 }

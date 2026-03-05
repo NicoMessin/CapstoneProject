@@ -23,8 +23,9 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**", "/news").permitAll() // news pubbliche
                 .anyRequest().authenticated()
+
         );
 
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

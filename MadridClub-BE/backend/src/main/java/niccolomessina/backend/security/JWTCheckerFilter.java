@@ -19,8 +19,9 @@ import java.io.IOException;
 
 @Component
 public class JWTCheckerFilter extends OncePerRequestFilter {
-    private JWTTools jwtTools;
-    private UtenteService utenteService;
+
+    private final JWTTools jwtTools;
+    private final UtenteService utenteService;
 
     @Autowired
     public JWTCheckerFilter(JWTTools jwtTools, UtenteService utenteService) {
@@ -31,21 +32,37 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) //deve iniziare con Baerer
-            throw new UnauthorizedException("Sembra tu abbia perso la tua chiave d'accesso. Cerca nelle tasche!");
-        String accessToken = authHeader.replace("Bearer ", ""); //rimuovo la parola baerer per avere solo JWT
-        jwtTools.verifyToken(accessToken); //controllo firma scadenza e integrità
 
-        // verify authorization
-        Utente authUtente = this.utenteService.findById(jwtTools.getId(accessToken)); //carico l'utente ed estraggo UUID
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authUtente, null, authUtente.getAuthorities()); //oggetti per sapere i ruoli
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("Sembra tu abbia perso la tua chiave d'accesso. Cerca nelle tasche!");
+        }
+
+        String accessToken = authHeader.replace("Bearer ", "");
+        jwtTools.verifyToken(accessToken);
+
+        // Carica utente e setta contesto sicurezza
+        Utente authUtente = this.utenteService.findById(jwtTools.getId(accessToken));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(authUtente, null, authUtente.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        //*************************************
+
         filterChain.doFilter(request, response);
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return new AntPathMatcher().match("/auth/**", request.getServletPath()); //su questa rotta non va controllato il token perchè chiunque deveentrare senza essere autenticato
+        String path = request.getServletPath();
+        String method = request.getMethod();
+
+        // Salta filtro JWT su rotte /auth/** (login/register)
+        if (new AntPathMatcher().match("/auth/**", path)) {
+            return true;
+        }
+
+        // Salta filtro JWT su GET pubbliche /news e /news/{id}
+        if (method.equals("GET") && new AntPathMatcher().match("/news/**", path)) {
+            return true;
+        }
+
+        return false; // tutte le altre richiedono JWT
     }
 }
