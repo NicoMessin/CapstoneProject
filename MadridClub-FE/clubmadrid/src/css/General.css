@@ -67,3 +67,8 @@
 
 .card-body {height: 220px;}
 
+.carouselImg {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}

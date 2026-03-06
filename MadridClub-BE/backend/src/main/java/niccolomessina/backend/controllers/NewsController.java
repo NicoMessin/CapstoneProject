@@ -26,7 +26,7 @@ public class NewsController {
 
     // GET /news → lista tutte le news (USER e ADMIN)
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+
     public List<News> getAllNews() {
         return newsService.getAllNews();
     }
