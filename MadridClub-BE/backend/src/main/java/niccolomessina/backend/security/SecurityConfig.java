@@ -23,7 +23,7 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers("/auth/**", "/news").permitAll() // news pubbliche
+                .requestMatchers("/auth/**", "/news", "/tickets").permitAll() // news pubbliche
                 .anyRequest().authenticated()
 
         );

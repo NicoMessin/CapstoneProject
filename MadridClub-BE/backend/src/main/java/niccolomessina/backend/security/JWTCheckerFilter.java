@@ -63,6 +63,11 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
             return true;
         }
 
+        // Salta filtro JWT su GET pubbliche /ticket e /tickets/{id}
+        if (method.equals("GET") && new AntPathMatcher().match("/tickets/**", path)) {
+            return true;
+        }
+
         return false; // tutte le altre richiedono JWT
     }
 }
