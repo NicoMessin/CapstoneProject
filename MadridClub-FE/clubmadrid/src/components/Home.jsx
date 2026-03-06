@@ -38,7 +38,7 @@ function Home() {
                     alt={item.title}
               
                   />
-                  <Carousel.Caption>
+                  <Carousel.Caption className="sfondoChiaro">
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>
                   </Carousel.Caption>
@@ -56,7 +56,7 @@ function Home() {
                     alt={item.title}
                     
                   />
-                  <Carousel.Caption>
+                  <Carousel.Caption className="sfondoChiaro">
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>
                   </Carousel.Caption>

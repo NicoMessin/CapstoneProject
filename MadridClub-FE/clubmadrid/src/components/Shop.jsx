@@ -71,6 +71,20 @@ return(
 </Container>
 )
 
-
-}
+/*
+<Carousel interval={null}>
+  {ticket.map((item) => (
+    <Carousel.Item key={item.id}>
+      <div className="card-body bg-secondary rounded-4 d-flex flex-column justify-content-center align-items-center mt-5">
+        <h5 className="card-title">{item.day}</h5>
+        <p className="card-text">{item.date}</p>
+        <p className="card-text">{item.opponents}</p>
+        <p className="card-text">{item.stadium}</p>
+        <button className="btn btn-primary">Acquista</button>
+      </div>
+    </Carousel.Item>
+  ))}
+</Carousel>
+*/
+ }
 export default Shop

@@ -21,39 +21,35 @@ function Tickets() {
 
 
   return (
-    <Container fluid>
-      <Row className="d-flex align-items-center">
-        <Col xs={4}></Col>
-        <Col xs={4} className=" mt-2 d-flex justify-content-center">
-          
-          <h1>BIGLIETTI</h1>
-        </Col>
+    <Container fluid className="sfondoTickets">
+      <Row className="d-flex align-items-center bg-dark">
+        <Col xs={2} ></Col>
+        <Col xs={8} className=""><h1 className="d-flex justify-content-center mt-2 text-white">BIGLIETTI</h1></Col>
 
-        <Col xs={4} className="text-end mt-2">
-          <i className="bi bi-search mx-2 fs-5 "></i>
-          <i className="bi bi-ticket-perforated mx-2 fs-5"></i>
+        <Col xs={2} className="text-end ">
+          <i className="bi bi-search mx-2 fs-5 text-white"></i>
+          <i className="bi bi-ticket-perforated mx-2 fs-5 text-white"></i>
         </Col>
       </Row>
 <Row>
 
-      <Carousel 
-              >
-        {ticket.map((item)=>(
-
-  <Carousel.Item key={item.id}>
-    <div className="card text-center mx-auto w-100 " >
-      <div className="card-body bg-danger ticketCard">
+   {ticket.map((item)=>(
+          
+        
+     <Col key={item.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+      <div className="card-body bg-secondary rounded-4 d-flex flex-column justify-content-center align-items-center mt-5 ">
         <h5 className="card-title">{item.day}</h5>
         <p className="card-text">{item.date}</p>
         <p className="card-text">{item.opponents}</p>
         <p className="card-text">{item.stadium}</p>
         <button className="btn btn-primary">Acquista</button>
       </div>
-    </div>
-  </Carousel.Item>
+      </Col>
+  
         ))}
 
-</Carousel>
+
+       
 </Row>
     </Container>
   );

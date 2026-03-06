@@ -69,8 +69,17 @@
 
 .carouselImg {
   width: 100%;
-  height: 400px;
+  max-height: 400px;
   object-fit: cover;
 }
 
-.ticketCard{height: 300px;}
+.sfondoTickets{ background-image: url("/images/Estadio_.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;}
+
+  .sfondoChiaro {
+  background-color: rgba(0, 0, 0, 0.3); 
+  padding: 1rem;
+  border-radius: 2rem;
+}
