@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Container, Row, Col } from "react-bootstrap";
 function Home() {

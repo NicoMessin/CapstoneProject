@@ -1,7 +1,25 @@
+import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 
 function Tickets() {
+  const[ticket, setTicket]= useState([])
+ useEffect(()=>{
+  fetch("http://localhost:3001/tickets")
+  .then((res)=>{
+    if(!res.ok) throw new Error("Errore nel recupero del ticket")
+       return res.json();
+  })
+  .then((data)=>{setTicket(data)})
+  .catch((err)=>console.error("Errore fetching ticket:", err));
+
+ }, []);
+ if(ticket.length=== 0){
+  return <p>Impossibile caricare i tickets.</p>;
+  }
+ 
+
+
   return (
     <Container fluid>
       <Row className="d-flex align-items-center">
@@ -18,50 +36,23 @@ function Tickets() {
       </Row>
 <Row>
 
-      <Carousel >
-  <Carousel.Item>
+      <Carousel 
+              >
+        {ticket.map((item)=>(
+
+  <Carousel.Item key={item.id}>
     <div className="card text-center mx-auto w-100 " >
-      <div className="card-body bg-danger ">
-        <h5 className="card-title">Partita 1</h5>
-        <p className="card-text">12/03/2026 - 20:45</p>
-        <p className="card-text">Real Madrid vs Barcellona</p>
+      <div className="card-body bg-danger ticketCard">
+        <h5 className="card-title">{item.day}</h5>
+        <p className="card-text">{item.date}</p>
+        <p className="card-text">{item.opponents}</p>
+        <p className="card-text">{item.stadium}</p>
         <button className="btn btn-primary">Acquista</button>
       </div>
     </div>
   </Carousel.Item>
+        ))}
 
-  <Carousel.Item>
-    <div className="card text-center mx-auto w-100">
-      <div className="card-body bg-danger">
-        <h5 className="card-title">Partita 2</h5>
-        <p className="card-text">13/03/2026 - 18:30</p>
-        <p className="card-text">Juventus vs Milan</p>
-        <button className="btn btn-primary">Acquista</button>
-      </div>
-    </div>
-  </Carousel.Item>
-
-  <Carousel.Item>
-    <div className="card text-center mx-auto w-100" >
-      <div className="card-body bg-danger">
-        <h5 className="card-title">Partita 3</h5>
-        <p className="card-text">14/03/2026 - 21:00</p>
-        <p className="card-text">Inter vs Napoli</p>
-        <button className="btn btn-primary">Acquista</button>
-      </div>
-    </div>
-  </Carousel.Item>
-
-  <Carousel.Item>
-    <div className="card text-center mx-auto w-100" >
-      <div className="card-body bg-danger">
-        <h5 className="card-title">Partita 4</h5>
-        <p className="card-text">15/03/2026 - 19:00</p>
-        <p className="card-text">Atalanta vs Roma</p>
-        <button className="btn btn-primary">Acquista</button>
-      </div>
-    </div>
-  </Carousel.Item>
 </Carousel>
 </Row>
     </Container>
