@@ -2,11 +2,13 @@ package niccolomessina.backend.services;
 
 import lombok.extern.slf4j.Slf4j;
 import niccolomessina.backend.entities.Ticket;
+import niccolomessina.backend.exceptions.NotFoundException;
 import niccolomessina.backend.payloads.TicketsDTO;
 import niccolomessina.backend.repositories.TicketRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -31,4 +33,19 @@ public class TicketService {
 
   // GET TUTTI BIGLIETTI
     public List<Ticket> getAllTickets(){ return ticketRepository.findAll();}
+
+    // GET BY ID
+    public Ticket getTicketById(UUID id){
+      return ticketRepository.findById(id)
+              .orElseThrow(() -> new NotFoundException(id));
+    }
+
+
+
+    //DELETE TICKET
+    public void deleteTicket(UUID id){
+        Ticket ticketDaEliminare= this.getTicketById(id);
+                ticketRepository.delete(ticketDaEliminare);
+    }
+
 }

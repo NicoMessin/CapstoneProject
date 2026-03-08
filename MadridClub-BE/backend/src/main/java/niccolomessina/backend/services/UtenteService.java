@@ -10,7 +10,9 @@ import niccolomessina.backend.repositories.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,6 +28,9 @@ public class UtenteService {
         this.tipoUtenteRepository = tipoUtenteRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
+    public List<Utente> getAllUsers(){return utenteRepository.findAll();}
+
 
     public Utente findById(UUID id) {
         return utenteRepository.findById(id)
@@ -57,6 +62,9 @@ public class UtenteService {
 
         return utenteRepository.save(nuovoUtente);
     }
-
+    public void  deleteTicket(UUID id){
+        Utente utenteDaEliminare = this.findById(id);
+        utenteRepository.delete(utenteDaEliminare);
+    }
 
 }
