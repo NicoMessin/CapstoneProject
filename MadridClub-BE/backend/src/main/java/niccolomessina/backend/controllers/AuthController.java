@@ -9,11 +9,15 @@ import niccolomessina.backend.services.AuthService;
 import niccolomessina.backend.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/auth")
@@ -46,6 +50,16 @@ public class AuthController {
         } else {
             return this.utenteService.saveUtente(payload);
         }
+    }
+    @GetMapping("/me")
+    public Map<String, String> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return Map.of("tipoUtente", "NON_LOGGATO");
+        }
+
+        // Cast del principal a Utente
+        Utente utente = (Utente) authentication.getPrincipal();
+        return Map.of("tipoUtente", utente.getTipoUtente().getTipoUtente().name());
     }
 
 

@@ -23,7 +23,7 @@ function FormLogin() {
     .then(data => {
       localStorage.setItem("token", data.accessToken);
       alert("Login effettuato!");
-        navigate("/");
+        navigate("/auth/me");
     })
     .catch(err => alert(err.message));
   };

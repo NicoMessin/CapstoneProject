@@ -78,7 +78,7 @@ function Home() {
               {news.slice(8, 10).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className=" rounded-4">
+                    <Card style={{ width: "18rem" }} className=" rounded-4 cardHomeImage">
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -104,7 +104,7 @@ function Home() {
               {news.slice(11, 13).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className="rounded-4">
+                    <Card style={{ width: "18rem" }} className="rounded-4 cardHomeImage">
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -130,7 +130,7 @@ function Home() {
               {news.slice(14, 16).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className=" rounded-4">
+                    <Card style={{ width: "18rem" }} className=" rounded-4 cardHomeImage">
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -156,7 +156,7 @@ function Home() {
               {news.slice(17, 19).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className="rounded-4">
+                    <Card style={{ width: "18rem" }} className="rounded-4 cardHomeImage">
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}

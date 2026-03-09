@@ -65,7 +65,7 @@ function UpperBar() {
       <Dropdown.Menu>
          <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
-        <Dropdown.Item href="/Profile">Profile</Dropdown.Item>
+        <Dropdown.Item href="/auth/me">Profile</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
       <i className="bi bi-gear text-black settings-btn fs-3  mx-3"></i>

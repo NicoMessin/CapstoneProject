@@ -1,7 +1,6 @@
 package niccolomessina.backend.security;
 
 import niccolomessina.backend.entities.Utente;
-import niccolomessina.backend.exceptions.UnauthorizedException;
 import niccolomessina.backend.services.UtenteService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -30,44 +28,37 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Sembra tu abbia perso la tua chiave d'accesso. Cerca nelle tasche!");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            try {
+                String token = authHeader.replace("Bearer ", "");
+                jwtTools.verifyToken(token);
+
+                Utente utente = utenteService.findById(jwtTools.getId(token));
+
+                // Qui settiamo il Principal e le Authorities
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                utente, null, utente.getAuthorities()
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (Exception ex) {
+                // se token non valido, lascia passare ma non autenticato
+                SecurityContextHolder.clearContext();
+            }
         }
-
-        String accessToken = authHeader.replace("Bearer ", "");
-        jwtTools.verifyToken(accessToken);
-
-        // Carica utente e setta contesto sicurezza
-        Utente authUtente = this.utenteService.findById(jwtTools.getId(accessToken));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(authUtente, null, authUtente.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        String method = request.getMethod();
-
-        // Salta filtro JWT su rotte /auth/** (login/register)
-        if (new AntPathMatcher().match("/auth/**", path)) {
-            return true;
-        }
-
-        // Salta filtro JWT su GET pubbliche /news e /news/{id}
-        if (method.equals("GET") && new AntPathMatcher().match("/news/**", path)) {
-            return true;
-        }
-
-        // Salta filtro JWT su GET pubbliche /ticket e /tickets/{id}
-        if (method.equals("GET") && new AntPathMatcher().match("/tickets/**", path)) {
-            return true;
-        }
-
-        return false; // tutte le altre richiedono JWT
+        return path.equals("/auth/login") || path.equals("/auth/register");
     }
 }

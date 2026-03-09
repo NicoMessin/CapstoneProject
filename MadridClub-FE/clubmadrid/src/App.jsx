@@ -9,6 +9,7 @@ import Shop from "./components/Shop";
 import UpperBar from "./components/UpperBar";
 import FormLogin from "./components/FormLogin";
 import FormRegister from "./components/FormRegister";
+import Dashboard from "./components/Dashboard";
 
 
 
@@ -28,6 +29,7 @@ function App() {
 
       {/* PAGINE */}
       <Routes>
+        <Route path="/auth/me" element={<Dashboard />} />
         <Route path="/" element={<Home />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/shop" element={<Shop />} />
