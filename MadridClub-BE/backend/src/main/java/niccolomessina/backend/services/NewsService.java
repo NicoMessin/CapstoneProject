@@ -2,6 +2,7 @@ package niccolomessina.backend.services;
 
 import lombok.extern.slf4j.Slf4j;
 import niccolomessina.backend.entities.News;
+import niccolomessina.backend.exceptions.NotFoundException;
 import niccolomessina.backend.payloads.NewsDTO;
 import niccolomessina.backend.repositories.NewsRepository;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,9 @@ public class NewsService {
 
     // CERCA NEWS PER ID
     public News getNewsById(UUID id) {
-        Optional<News> news = newsRepository.findById(id);
 
-            return news.get();
+            return newsRepository.findById(id)
+               .orElseThrow(() -> new NotFoundException(id));
 
     }
 
