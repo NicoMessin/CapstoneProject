@@ -6,9 +6,22 @@ import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useState, useEffect } from "react";
 
 function UpperBar() {
     const navigate = useNavigate();
+     const [role, setRole] = useState("NON_LOGGATO");
+    useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("http://localhost:3001/auth/me", {
+      headers: { "Authorization": "Bearer " + token },
+    })
+      .then((res) => res.json())
+      .then((data) => setRole(data.tipoUtente || "NON_LOGGATO"))
+      .catch(() => setRole("NON_LOGGATO"));
+  }, []);
   return (
     <Container fluid className="bg-secondary">
      <Row className="align-items-center  py-md-3">
@@ -20,11 +33,17 @@ function UpperBar() {
   </div>
 
 
-    <div className="d-none d-md-flex">
+    <div className="d-none d-md-flex align-items-center">
       <Nav.Link as={Link} to="/" className="mx-3">HOME</Nav.Link>
       <Nav.Link as={Link} to="/tickets" className="mx-3">TICKETS</Nav.Link>
       <Nav.Link as={Link} to="/shop" className="mx-3">SHOP</Nav.Link>
-    </div>
+    {/* Link visibile solo agli admin */}
+  {role === "ADMIN" && (
+    <Nav.Link as={Link} to="/admin-panel" className="mx-3" >
+      ADMIN PANEL
+    </Nav.Link>
+  )}
+  </div>
   </Col>
 
   {/* CENTRO */}
@@ -50,7 +69,7 @@ function UpperBar() {
       <Dropdown.Menu>
         <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
-        <Dropdown.Item href="/Profile">Profile</Dropdown.Item>
+        <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
     {/* Desktop */}
@@ -65,7 +84,8 @@ function UpperBar() {
       <Dropdown.Menu>
          <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
-        <Dropdown.Item href="/auth/me">Profile</Dropdown.Item>
+        <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
+        
       </Dropdown.Menu>
     </Dropdown>
       <i className="bi bi-gear text-black settings-btn fs-3  mx-3"></i>

@@ -29,7 +29,7 @@ function App() {
 
       {/* PAGINE */}
       <Routes>
-        <Route path="/auth/me" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Home />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/shop" element={<Shop />} />

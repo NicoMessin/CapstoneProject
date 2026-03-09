@@ -35,7 +35,7 @@ function FormRegister() {
 .then(data => {
   console.log(data); 
   alert("Registrazione effettuata! Ora puoi fare login.");
-  navigate('/auth/me')
+  navigate('/')
 })
     .catch(err => alert(err.message));
   };
