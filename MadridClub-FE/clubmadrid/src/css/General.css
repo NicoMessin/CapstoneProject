@@ -85,3 +85,11 @@
 }
 
 .cardHomeImage{height: 350px;}
+.cartCount{position: absolute;
+  top: -8px;
+  right: -8px;
+  background: grey;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;}

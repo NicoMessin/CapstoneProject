@@ -1,10 +1,13 @@
 import { Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Shop() {
   const [product, setProduct] = useState([]);
+  const[cartCount, setCartCount]= useState(0)
+  const navigate= useNavigate()
   useEffect(() => {
     fetch("http://localhost:3001/products")
       .then((res) => {
@@ -27,7 +30,15 @@ function Shop() {
 
         <Col xs={4} className="text-end mt-2">
           <i className="bi bi-search mx-2 fs-5"></i>
-          <i className="bi bi-bag mx-2 fs-5"></i>
+          <span className=" position-relative">
+<i className="bi bi-bag mx-2 fs-5" onClick={()=> navigate('/carrelloItemsShop')}></i>
+  
+  {cartCount>0 &&(
+    <span className="cartCount">
+    {cartCount}
+    </span>
+  )}
+          </span>
         </Col>
       </Row>
       <Row className="mt-3 mt-lg-5">
@@ -40,7 +51,7 @@ function Shop() {
           className="d-flex justify-content-center mb-4"
         >
           <Card style={{ width: "18rem" }}>
-            <Card.Img variant="top" src={item.img}/>
+            <Card.Img variant="top" src={item.imageUrl}/>
             <Card.Body>
               <Card.Title>{item.name_product}</Card.Title>
               <Card.Text>
@@ -49,7 +60,7 @@ function Shop() {
               <Card.Text>
                {item.price}
               </Card.Text>
-              <Button variant="primary">Go somewhere</Button>
+              <Button variant="primary" onClick={()=>setCartCount(prev=> prev+1)}>COMPRA</Button>
             </Card.Body>
           </Card>
         </Col>

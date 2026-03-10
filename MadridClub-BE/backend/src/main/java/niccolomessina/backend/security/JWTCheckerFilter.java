@@ -14,6 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JWTCheckerFilter extends OncePerRequestFilter {
@@ -40,16 +41,18 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
 
                 Utente utente = utenteService.findById(jwtTools.getId(token));
 
-                // Qui settiamo il Principal e le Authorities
+                // Assicurati che il principal e le authorities siano settate correttamente
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
-                                utente, null, utente.getAuthorities()
+                                utente,
+                                null,
+                                utente.getAuthorities() != null ? utente.getAuthorities() : List.of()
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (Exception ex) {
-                // se token non valido, lascia passare ma non autenticato
-                SecurityContextHolder.clearContext();
+                // Non fare clearContext, meglio loggare e lasciare anonimo
+                System.out.println("JWT invalido: " + ex.getMessage());
             }
         }
 

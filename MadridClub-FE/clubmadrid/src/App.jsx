@@ -10,6 +10,7 @@ import UpperBar from "./components/UpperBar";
 import FormLogin from "./components/FormLogin";
 import FormRegister from "./components/FormRegister";
 import Dashboard from "./components/Dashboard";
+import Carrello from "./components/Carrello";
 
 
 
@@ -29,6 +30,8 @@ function App() {
 
       {/* PAGINE */}
       <Routes>
+
+        <Route path="/carrelloItemsShop" element={<Carrello />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Home />} />
         <Route path="/tickets" element={<Tickets />} />

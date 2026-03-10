@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Carousel from "react-bootstrap/Carousel";
+import { useNavigate } from "react-router-dom";
 
 function Tickets() {
   const[ticket, setTicket]= useState([])
+  const [cartCount, setCartCount] = useState(0);
+  const navigate= useNavigate()
  useEffect(()=>{
   fetch("http://localhost:3001/tickets")
   .then((res)=>{
@@ -28,7 +30,17 @@ function Tickets() {
 
         <Col xs={2} className="text-end ">
           <i className="bi bi-search mx-2 fs-5 text-white"></i>
-          <i className="bi bi-ticket-perforated mx-2 fs-5 text-white"></i>
+          
+          <span className=" position-relative">
+          <i className="bi bi-ticket-perforated mx-2 fs-5 text-white" onClick={()=>navigate('/CarrelloItemsShop')}></i>
+            
+           {cartCount > 0 && (
+      <span className="cartCount"
+      >
+        {cartCount}
+        </span>
+           )}
+      </span>
         </Col>
       </Row>
 <Row>
@@ -42,7 +54,7 @@ function Tickets() {
         <p className="card-text">{item.date}</p>
         <p className="card-text">{item.opponents}</p>
         <p className="card-text">{item.stadium}</p>
-        <button className="btn btn-primary">Acquista</button>
+        <button className="btn btn-primary" onClick={()=>setCartCount(prev =>prev+1)}>Acquista</button>
       </div>
       </Col>
   

@@ -1,0 +1,63 @@
+package niccolomessina.backend.controllers;
+
+
+import niccolomessina.backend.entities.CarrelloItemShop;
+import niccolomessina.backend.entities.EnumTaglia;
+import niccolomessina.backend.entities.Utente;
+import niccolomessina.backend.payloads.CarrelloItemsShopDTO;
+import niccolomessina.backend.payloads.TicketsDTO;
+import niccolomessina.backend.services.CarrelloItemShopService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
+@RequestMapping("/carrelloItemsShop")
+public class CarrelloItemsShopController {
+
+        private final CarrelloItemShopService carrelloItemShopService;
+
+        public CarrelloItemsShopController(CarrelloItemShopService carrelloItemShopService) {
+            this.carrelloItemShopService = carrelloItemShopService;
+        }
+
+        //AGGIUNGI ITEM
+        @PostMapping("")
+        @ResponseStatus(HttpStatus.CREATED)
+        public CarrelloItemShop addItem(@RequestBody @Validated CarrelloItemsShopDTO carrelloItemsShopDTO, BindingResult validation, @AuthenticationPrincipal Utente utente) {
+            if (validation.hasErrors()){
+                throw new IllegalArgumentException("Errore nei dati del prodotto");}
+            return carrelloItemShopService.saveCarrelloItem(carrelloItemsShopDTO);
+
+        }
+
+
+        //OTTENGO TUTTI GLI ITEM DI UN UTENTE
+    @GetMapping("/utente/{id}")
+    public List<CarrelloItemShop> getItemsByUser(@PathVariable UUID id) {
+        return carrelloItemShopService.findUtenteCarrelloItemShop(id);
+    }
+
+
+    //AGGIORNA ITEM
+    @PutMapping("/{id}")
+    public CarrelloItemShop updateItem(@PathVariable UUID id,
+                                       @RequestParam int quantita,
+                                       @RequestParam EnumTaglia taglia) {
+        return carrelloItemShopService.aggiornaItem(id, quantita, taglia);
+    }
+
+    // Elimina un item
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteItem(@PathVariable UUID id) {
+        carrelloItemShopService.deleteCarrelloItemShopById(id);
+    }
+
+    }
