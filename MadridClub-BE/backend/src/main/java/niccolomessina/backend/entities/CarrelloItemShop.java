@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -24,6 +23,7 @@ public class CarrelloItemShop {
     private int quantita;
     @Enumerated(EnumType.STRING)
     private EnumTaglia enumTaglia;
+
     private BigDecimal totale;
 
     @ManyToOne
@@ -36,7 +36,7 @@ public class CarrelloItemShop {
 
     public CarrelloItemShop(int quantita, EnumTaglia enumTaglia, Utente utente, Product prodotto){
         this.quantita= quantita;
-        this.enumTaglia= enumTaglia;
+       this.enumTaglia= enumTaglia;
         this.totale = prodotto.getPrice().multiply(BigDecimal.valueOf(quantita));
         this.utente= utente;
         this.prodotto= prodotto;

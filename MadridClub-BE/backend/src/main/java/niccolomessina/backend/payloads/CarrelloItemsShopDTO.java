@@ -1,6 +1,5 @@
 package niccolomessina.backend.payloads;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import niccolomessina.backend.entities.EnumTaglia;
 

@@ -1,6 +1,7 @@
 package niccolomessina.backend.services;
 
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import niccolomessina.backend.entities.CarrelloItemShop;
 import niccolomessina.backend.entities.EnumTaglia;
@@ -60,5 +61,12 @@ public class CarrelloItemShopService {
         item.setEnumTaglia(taglia);
         item.aggiornaTotale();
         return carrelloItemShopRepository.save(item);
+    }
+
+    //SVUOTA TUTTO IL CARRELLO
+    //senza transactional non va perchè dice di aprire transazione, eliminare e chiuderla.
+    @Transactional
+    public void svuotaCarrello(Utente utente){
+        carrelloItemShopRepository.deleteAllByUtenteId(utente.getId());
     }
 }

@@ -7,4 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CarrelloItemShopRepository extends JpaRepository<CarrelloItemShop, UUID> {
-    List<CarrelloItemShop> findByUtenteIdOrderByIdAsc(UUID id);}
+    List<CarrelloItemShop> findByUtenteIdOrderByIdAsc(UUID id);
+    void deleteAllByUtenteId(UUID utenteId);}

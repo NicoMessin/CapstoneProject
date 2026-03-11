@@ -44,6 +44,12 @@ public class CarrelloItemsShopController {
             return carrelloItemShopService.findUtenteCarrelloItemShop(utente.getId());
         }
 
+        //PER SVUOTARE IL CARRELLO
+    @DeleteMapping("/mio")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void svuotaCarrello(@AuthenticationPrincipal Utente utente) {
+        carrelloItemShopService.svuotaCarrello(utente);
+    }
 
     //AGGIORNA ITEM
     @PutMapping("/{id}")

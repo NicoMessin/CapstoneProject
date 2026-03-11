@@ -12,7 +12,7 @@ function Carrello() {
       },
     })
       .then((res) =>
-        res.ok ? res.json() : Promise.reject("Errore fetching carrello"),
+        res.ok ? res.json() : Promise.reject("Errore fetching carrello")
       )
       .then((data) => setItemCarrello(data))
       .catch((err) => console.error(err));
@@ -32,10 +32,42 @@ function Carrello() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      },
+      }
     )
       .then((res) => {
         if (!res.ok) throw new Error("Errore aggiornamento item");
+        fetchCarrello();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const eliminaItem = (id) => {
+    const token = localStorage.getItem("token");
+
+    fetch(`http://localhost:3001/carrelloItemsShop/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Errore eliminazione item");
+        fetchCarrello();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const svuotaCarrello = () => {
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:3001/carrelloItemsShop/mio", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Errore svuotamento carrello");
         fetchCarrello();
       })
       .catch((err) => console.error(err));
@@ -50,6 +82,8 @@ function Carrello() {
   return (
     <div>
       <h1>CARRELLO</h1>
+      {itemCarrello.length === 0 && <p>Il carrello è vuoto</p>}
+
       {itemCarrello.map((item) => (
         <div
           key={item.id}
@@ -75,6 +109,7 @@ function Carrello() {
             <option value="M">M</option>
             <option value="L">L</option>
             <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
           </select>
 
           <label>Quantità:</label>
@@ -88,11 +123,19 @@ function Carrello() {
           />
 
           <p>Totale: €{item.prodotto.price * item.quantita}</p>
+          <button onClick={() => eliminaItem(item.id)}>Elimina</button>
         </div>
       ))}
 
-      {/* 🔹 Mostra totale globale */}
+      {/* 🔹 Totale globale */}
       <h2 style={{ marginTop: "20px" }}>Totale Carrello: €{totaleCarrello}</h2>
+
+      {/* 🔹 Pulsante svuota carrello */}
+      {itemCarrello.length > 0 && (
+        <button onClick={svuotaCarrello} style={{ marginTop: "20px" }}>
+          Svuota Carrello
+        </button>
+      )}
     </div>
   );
 }
