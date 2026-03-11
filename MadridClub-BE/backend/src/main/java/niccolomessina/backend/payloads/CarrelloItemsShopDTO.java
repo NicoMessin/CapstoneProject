@@ -13,10 +13,6 @@ public record CarrelloItemsShopDTO (
         @NotNull(message = "La taglia è obbligatoria")
         EnumTaglia enumTaglia,
 
-
-        @NotNull(message = "L'id dell'utente è obbligatorio")
-        UUID utenteId,
-
         @NotNull(message = "L'id del prodotto è obbligatorio")
         UUID prodottoId
 

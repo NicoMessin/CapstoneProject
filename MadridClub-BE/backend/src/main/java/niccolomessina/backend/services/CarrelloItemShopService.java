@@ -28,10 +28,9 @@ public class CarrelloItemShopService {
     }
 
     //SAVE
-    public CarrelloItemShop saveCarrelloItem(CarrelloItemsShopDTO payload){
+    public CarrelloItemShop saveCarrelloItem(CarrelloItemsShopDTO payload, Utente utente){
     // recupero Utente e Prodotto dal DB
-    Utente utente = utenteRepository.findById(payload.utenteId())
-            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+
 
     Product prodotto = productRepository.findById(payload.prodottoId())
             .orElseThrow(() -> new IllegalArgumentException("Prodotto non trovato"));
@@ -45,7 +44,7 @@ public class CarrelloItemShopService {
 
     //FIND ALL PER MOSTRARE GLI ITEM DELL'UTENTE
     public List <CarrelloItemShop> findUtenteCarrelloItemShop(UUID id){
-        return carrelloItemShopRepository.findByUtenteId(id);
+        return carrelloItemShopRepository.findByUtenteIdOrderByIdAsc(id);
     }
 
 //DELETE

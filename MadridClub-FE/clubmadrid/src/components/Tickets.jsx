@@ -32,7 +32,7 @@ function Tickets() {
           <i className="bi bi-search mx-2 fs-5 text-white"></i>
           
           <span className=" position-relative">
-          <i className="bi bi-ticket-perforated mx-2 fs-5 text-white" onClick={()=>navigate('/CarrelloItemsShop')}></i>
+          <i className="bi bi-ticket-perforated mx-2 fs-5 text-white" onClick={()=>navigate('/carrelloItemsShop')}></i>
             
            {cartCount > 0 && (
       <span className="cartCount"

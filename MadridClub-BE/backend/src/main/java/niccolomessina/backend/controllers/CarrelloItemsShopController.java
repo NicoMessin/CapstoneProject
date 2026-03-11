@@ -33,16 +33,16 @@ public class CarrelloItemsShopController {
         public CarrelloItemShop addItem(@RequestBody @Validated CarrelloItemsShopDTO carrelloItemsShopDTO, BindingResult validation, @AuthenticationPrincipal Utente utente) {
             if (validation.hasErrors()){
                 throw new IllegalArgumentException("Errore nei dati del prodotto");}
-            return carrelloItemShopService.saveCarrelloItem(carrelloItemsShopDTO);
+            return carrelloItemShopService.saveCarrelloItem(carrelloItemsShopDTO, utente);
 
         }
 
 
         //OTTENGO TUTTI GLI ITEM DI UN UTENTE
-    @GetMapping("/utente/{id}")
-    public List<CarrelloItemShop> getItemsByUser(@PathVariable UUID id) {
-        return carrelloItemShopService.findUtenteCarrelloItemShop(id);
-    }
+        @GetMapping("/mio")
+        public List<CarrelloItemShop> getMyCart(@AuthenticationPrincipal Utente utente) {
+            return carrelloItemShopService.findUtenteCarrelloItemShop(utente.getId());
+        }
 
 
     //AGGIORNA ITEM
@@ -50,6 +50,11 @@ public class CarrelloItemsShopController {
     public CarrelloItemShop updateItem(@PathVariable UUID id,
                                        @RequestParam int quantita,
                                        @RequestParam EnumTaglia taglia) {
+
+        if (quantita <= 0) {
+            throw new IllegalArgumentException("La quantità deve essere almeno 1");
+        }
+
         return carrelloItemShopService.aggiornaItem(id, quantita, taglia);
     }
 

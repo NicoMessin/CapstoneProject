@@ -1,49 +1,91 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-function Carrello(){
+function Carrello() {
+  const [itemCarrello, setItemCarrello] = useState([]);
 
-cont [itemCarrello, setItemCarrello] = useState([])
-useEffect(()=>{
-fetch("http://localhost:3001/carrelloItemsShop")
-.then((res)=>{
-    if(!res.ok) {throw new Error("Errore nel recuper dell'item")}
-    return res.json()
-})
-.then((data)=>{setItemCarrello(data)})
-.catch((err)=>{console.error("Errore fetching item:", err)})
+  const fetchCarrello = () => {
+    const token = localStorage.getItem("token");
 
-},[])
-    return(
-        <h1>CARRELLO</h1>
+    fetch("http://localhost:3001/carrelloItemsShop/mio", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject("Errore fetching carrello"),
+      )
+      .then((data) => setItemCarrello(data))
+      .catch((err) => console.error(err));
+  };
 
-        {itemCarrello.map((item)=>(<div key={item.id} style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
+  useEffect(() => {
+    fetchCarrello();
+  }, []);
+
+  const aggiornaItem = (id, quantita, taglia) => {
+    const token = localStorage.getItem("token");
+
+    fetch(
+      `http://localhost:3001/carrelloItemsShop/${id}?quantita=${quantita}&taglia=${taglia}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error("Errore aggiornamento item");
+        fetchCarrello();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  return (
+    <div>
+      <h1>CARRELLO</h1>
+      {itemCarrello.map((item) => (
+        <div
+          key={item.id}
+          style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}
+        >
           <h3>{item.prodotto.name_product}</h3>
-          <img src={item.prodotto.imageUrl} alt={item.prodotto.name_product} width={100} />
+          <img
+            src={item.prodotto.imageUrl}
+            alt={item.prodotto.name_product}
+            width={100}
+          />
           <p>Prezzo unitario: €{item.prodotto.price}</p>
 
-          {/* Taglia */}
+          <label>Taglia:</label>
           <select
             value={item.enumTaglia}
-            onChange={(e) => aggiornaItem(item.id, item.quantita, e.target.value)}
+            onChange={(e) =>
+              aggiornaItem(item.id, item.quantita, e.target.value)
+            }
           >
+            <option value="XS">XS</option>
             <option value="S">S</option>
             <option value="M">M</option>
             <option value="L">L</option>
             <option value="XL">XL</option>
           </select>
 
-          {/* Quantità */}
+          <label>Quantità:</label>
           <input
             type="number"
             value={item.quantita}
             min="1"
-            onChange={(e) => aggiornaItem(item.id, parseInt(e.target.value), item.enumTaglia)}
+            onChange={(e) =>
+              aggiornaItem(item.id, parseInt(e.target.value), item.enumTaglia)
+            }
           />
 
-          <p>Totale: €{item.totale}</p>
+          <p>Totale: €{item.prodotto.price * item.quantita}</p>
         </div>
-            
-        ))}
-    )
+      ))}
+    </div>
+  );
 }
-export default Carrello
+
+export default Carrello;
