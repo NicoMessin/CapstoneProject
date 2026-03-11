@@ -64,7 +64,7 @@ public class CarrelloItemsShopController {
         return carrelloItemShopService.aggiornaItem(id, quantita, taglia);
     }
 
-    // Elimina un item
+    // ElIMINA UN ITEM
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteItem(@PathVariable UUID id) {

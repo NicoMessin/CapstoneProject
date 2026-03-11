@@ -6,6 +6,8 @@ function Tickets() {
   const[ticket, setTicket]= useState([])
   const [cartCount, setCartCount] = useState(0);
   const navigate= useNavigate()
+
+  //fetch tickets
  useEffect(()=>{
   fetch("http://localhost:3001/tickets")
   .then((res)=>{
