@@ -35,7 +35,13 @@ function FormRegister() {
 .then(data => {
   console.log(data); 
   alert("Registrazione effettuata! Ora puoi fare login.");
-  navigate('/')
+
+  // svuota qualsiasi utente loggato
+  localStorage.removeItem("token");
+
+  // naviga al login
+  navigate('/auth/login');
+
 })
     .catch(err => alert(err.message));
   };

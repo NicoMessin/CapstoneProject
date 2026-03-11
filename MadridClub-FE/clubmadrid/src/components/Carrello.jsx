@@ -41,6 +41,12 @@ function Carrello() {
       .catch((err) => console.error(err));
   };
 
+  // 🔹 Calcolo totale globale
+  const totaleCarrello = itemCarrello.reduce(
+    (sum, item) => sum + item.prodotto.price * item.quantita,
+    0
+  );
+
   return (
     <div>
       <h1>CARRELLO</h1>
@@ -84,6 +90,9 @@ function Carrello() {
           <p>Totale: €{item.prodotto.price * item.quantita}</p>
         </div>
       ))}
+
+      {/* 🔹 Mostra totale globale */}
+      <h2 style={{ marginTop: "20px" }}>Totale Carrello: €{totaleCarrello}</h2>
     </div>
   );
 }
