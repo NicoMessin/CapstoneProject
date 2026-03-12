@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -25,11 +26,13 @@ public class Ticket {
     private LocalDateTime date;
     private String opponents;
     private String stadium;
+    private BigDecimal price;
 
-    public  Ticket(String day, LocalDateTime date, String opponents, String stadium){
+    public  Ticket(String day, LocalDateTime date, String opponents, String stadium, BigDecimal price){
         this.day= day;
         this.date= date;
         this.opponents= opponents;
         this.stadium = stadium;
+        this.price = price;
     }
 }

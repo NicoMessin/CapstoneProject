@@ -26,7 +26,8 @@ public class TicketService {
                 payload.day(),
                 payload.date(),
                 payload.opponents(),
-                payload.stadium()
+                payload.stadium(),
+                payload.price()
         ) ;
         return ticketRepository.save(nuovoTicket);
     }

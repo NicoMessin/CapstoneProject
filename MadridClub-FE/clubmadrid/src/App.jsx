@@ -11,6 +11,7 @@ import FormLogin from "./components/FormLogin";
 import FormRegister from "./components/FormRegister";
 import Dashboard from "./components/Dashboard";
 import Carrello from "./components/Carrello";
+import CarrelloTickets from "./components/CarrelloTickets";
 
 
 
@@ -31,6 +32,7 @@ function App() {
       {/* PAGINE */}
       <Routes>
 
+        <Route path="/carrelloTickets" element={<CarrelloTickets />} />
         <Route path="/carrelloItemsShop" element={<Carrello />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Home />} />

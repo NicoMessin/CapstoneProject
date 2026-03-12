@@ -3,6 +3,7 @@ package niccolomessina.backend.payloads;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record TicketsDTO (
@@ -13,6 +14,8 @@ public record TicketsDTO (
         @NotBlank(message = "Gli avversari sono obbligatori")
         String opponents,
          @NotBlank(message = "Lo stadio è obbligatorio")
-                String stadium
+                String stadium,
+        @NotNull(message = "Il prezzo è obbligatorio")
+        BigDecimal price
 ) {
 }
