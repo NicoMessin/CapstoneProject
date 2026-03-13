@@ -47,6 +47,13 @@ function Tickets() {
   const handleCompra = (item) => {
   const token = localStorage.getItem("token");
 
+  // Se non sei loggato, reindirizza al login
+  if (!token) {
+     alert("Per acquistare un biglietto è necessario fare prima il login.");
+    navigate("/auth/Login");
+    return;
+  }
+
   // Fetch del carrello aggiornato
   fetch("http://localhost:3001/carrelloTickets/mio", {
     headers: { Authorization: `Bearer ${token}` },
@@ -56,16 +63,13 @@ function Tickets() {
       return res.json();
     })
     .then((carrello) => {
-      // Conta quanti biglietti dello stesso ticket ci sono già
       const bigliettiMioTicket = carrello.filter(i => i.ticket.id === item.id).length;
 
-      // Se già ce ne sono 5, blocca
       if (bigliettiMioTicket >= 5) {
         alert("Non puoi acquistare più di 5 biglietti per la stessa partita con lo stesso account.");
         throw new Error("Limite biglietti superato");
       }
 
-      // Fetch dei posti disponibili
       return fetch(`http://localhost:3001/carrelloTickets/postiDisponibili/${item.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -75,7 +79,6 @@ function Tickets() {
       return res.json();
     })
     .then((posti) => {
-      // Trova prima fila disponibile e primo posto libero
       const filaDisponibile = Object.keys(posti).find(f => posti[f]?.length > 0);
       if (!filaDisponibile) {
         alert("Non ci sono più posti disponibili per questo ticket!");
@@ -84,7 +87,6 @@ function Tickets() {
 
       const posto = posti[filaDisponibile][0];
 
-      // Aggiungi al carrello
       return fetch("http://localhost:3001/carrelloTickets", {
         method: "POST",
         headers: {
@@ -96,6 +98,9 @@ function Tickets() {
           enumFila: filaDisponibile,
           enumPosto: posto,
           ticketId: item.id,
+          nome: "", // placeholder
+          cognome: "", // placeholder
+          dataNascita: "2000-01-01", // placeholder
         }),
       });
     })
@@ -106,6 +111,7 @@ function Tickets() {
     .then(() => fetchCartCount())
     .catch((err) => console.error(err));
 };
+         
   if (loading) return <p>Caricamento in corso...</p>;
   if (!loading && ticket.length === 0) return <p>Impossibile caricare i tickets.</p>;
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function CarrelloTickets() {
   const [itemCarrello, setItemCarrello] = useState([]);
@@ -17,7 +18,6 @@ function CarrelloTickets() {
     APMR: 250,
   };
 
-  // Fetch sicuro del carrello
   const fetchCarrello = () => {
     if (!token) return console.error("Token mancante!");
     fetch("http://localhost:3001/carrelloTickets/mio", {
@@ -34,9 +34,7 @@ function CarrelloTickets() {
       .catch((err) => console.error(err));
   };
 
-  // Fetch posti disponibili per ticket (settore+fila)
   const fetchPostiDisponibili = (ticketId) => {
-    const token = localStorage.getItem("token");
     fetch(`http://localhost:3001/carrelloTickets/postiDisponibili/${ticketId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -92,21 +90,20 @@ function CarrelloTickets() {
   };
 
   const aggiornaInfo = (id, campo) => {
-  const token = localStorage.getItem("token");
-  fetch(`http://localhost:3001/carrelloTickets/updateInfo/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(campo),
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("Errore aggiornamento info ticket");
-      fetchCarrello();
+    fetch(`http://localhost:3001/carrelloTickets/updateInfo/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(campo),
     })
-    .catch((err) => console.error(err));
-};
+      .then((res) => {
+        if (!res.ok) throw new Error("Errore aggiornamento info ticket");
+        fetchCarrello();
+      })
+      .catch((err) => console.error(err));
+  };
 
   const totaleCarrello = itemCarrello.reduce(
     (sum, item) => sum + prezziSettore[item.enumSettore],
@@ -114,113 +111,135 @@ function CarrelloTickets() {
   );
 
   return (
-    <div>
-      <h1>CARRELLO</h1>
+    <div className="container my-4">
+      <h1 className="mb-4">Carrello</h1>
 
       {itemCarrello.length === 0 && <p>Il carrello è vuoto</p>}
 
       {itemCarrello.map((item) => {
         const prezzo = prezziSettore[item.enumSettore];
-
         return (
-          <div key={item.id} style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
-            <h3>{item.ticket.day}</h3>
-            <h3>{item.ticket.date}</h3>
-            <h3>{item.ticket.opponents}</h3>
-            <h3>{item.ticket.stadium}</h3>
+          <div key={item.id} className="card mb-3 shadow-sm">
+            <div className="card-body card-bodyTicketShop">
+              <h5 className="card-title">{item.ticket.day} - {item.ticket.date}</h5>
+              <h6 className="card-subtitle mb-2 text-muted">{item.ticket.opponents} @ {item.ticket.stadium}</h6>
 
-            <p>Prezzo: €{prezzo}</p>
+              <p>Prezzo: <strong>€{prezzo}</strong></p>
 
-            <label>Settore:</label>
-            <select
-              value={item.enumSettore}
-              onChange={(e) =>
-                aggiornaItem(item.id, e.target.value, item.enumFila, item.enumPosto)
-              }
-            >
-              {Object.keys(prezziSettore).map((settore) => (
-                <option key={settore} value={settore}>
-                  {settore}
-                </option>
-              ))}
-            </select>
+              <div className="row g-3">
+                <div className="col-md-4">
+                  <label className="form-label">Settore</label>
+                  <select
+                    className="form-select"
+                    value={item.enumSettore}
+                    onChange={(e) =>
+                      aggiornaItem(item.id, e.target.value, item.enumFila, item.enumPosto)
+                    }
+                  >
+                    {Object.keys(prezziSettore).map((settore) => (
+                      <option key={settore} value={settore}>
+                        {settore}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            <label>Fila:</label>
-            <select
-              value={item.enumFila}
-              onChange={(e) =>
-                aggiornaItem(item.id, item.enumSettore, e.target.value, item.enumPosto)
-              }
-            >
-              {[...Array(20)].map((_, i) => (
-                <option key={i} value={`FILA_${i + 1}`}>
-                  FILA_{i + 1}
-                </option>
-              ))}
-            </select>
+                <div className="col-md-4">
+                  <label className="form-label">Fila</label>
+                  <select
+                    className="form-select"
+                    value={item.enumFila}
+                    onChange={(e) =>
+                      aggiornaItem(item.id, item.enumSettore, e.target.value, item.enumPosto)
+                    }
+                  >
+                    {[...Array(20)].map((_, i) => (
+                      <option key={i} value={`FILA_${i + 1}`}>FILA_{i + 1}</option>
+                    ))}
+                  </select>
+                </div>
 
-            <label>Posto:</label>
-            <select
-              value={item.enumPosto}
-              onChange={(e) =>
-                aggiornaItem(item.id, item.enumSettore, item.enumFila, e.target.value)
-              }
-            >
-              {"ABCDEFGHIJKLMNOPQR".split("").map((posto) => {
-                const key = item.enumSettore + "_" + item.enumFila;
-                const occupatoAltri =
-                  postiDisponibili[item.ticket.id]?.[key]?.includes(posto) ?? false;
+                <div className="col-md-4">
+                  <label className="form-label">Posto</label>
+                  <select
+                    className="form-select"
+                    value={item.enumPosto}
+                    onChange={(e) =>
+                      aggiornaItem(item.id, item.enumSettore, item.enumFila, e.target.value)
+                    }
+                  >
+                    {"ABCDEFGHIJKLMNOPQR".split("").map((posto) => {
+                      const key = item.enumSettore + "_" + item.enumFila;
+                      const occupatoAltri = postiDisponibili[item.ticket.id]?.[key]?.includes(posto) ?? false;
+                      const occupatoMioCarrello = itemCarrello.some(
+                        (i) =>
+                          i.id !== item.id &&
+                          i.enumSettore === item.enumSettore &&
+                          i.enumFila === item.enumFila &&
+                          i.enumPosto === posto &&
+                          i.ticket.id === item.ticket.id
+                      );
+                      const disabilita = (occupatoAltri || occupatoMioCarrello) && posto !== item.enumPosto;
+                      return (
+                        <option key={posto} value={posto} disabled={disabilita}>
+                          {posto} {disabilita ? "(Occupato)" : ""}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
 
-                const occupatoMioCarrello = itemCarrello.some(
-                  (i) =>
-                    i.id !== item.id &&
-                    i.enumSettore === item.enumSettore &&
-                    i.enumFila === item.enumFila &&
-                    i.enumPosto === posto &&
-                    i.ticket.id === item.ticket.id
-                );
+              <div className="row g-3 mt-3">
+  <div className="col-md-4 d-flex flex-column flex-md-row align-items-md-center">
+    <label className="form-label me-md-2 mb-1 mb-md-0">Nome:</label>
+    <input
+      type="text"
+      className="form-control"
+      value={item.nome || ""}
+      onChange={(e) => aggiornaInfo(item.id, { nome: e.target.value })}
+    />
+  </div>
 
-                const disabilita = (occupatoAltri || occupatoMioCarrello) && posto !== item.enumPosto;
+  <div className="col-md-4 d-flex flex-column flex-md-row align-items-md-center">
+    <label className="form-label me-md-2 mb-1 mb-md-0">Cognome:</label>
+    <input
+      type="text"
+      className="form-control"
+      value={item.cognome || ""}
+      onChange={(e) => aggiornaInfo(item.id, { cognome: e.target.value })}
+    />
+  </div>
 
-                return (
-                  <option key={posto} value={posto} disabled={disabilita}>
-                    {posto} {disabilita ? "(Occupato)" : ""}
-                  </option>
-                );
-              })}
-            </select>
-<label>Nome:</label>
-<input
-  type="text"
-  value={item.nome || ""}
-  onChange={(e) => aggiornaInfo(item.id, { nome: e.target.value })}
-/>
+  <div className="col-md-4 d-flex flex-column flex-md-row align-items-md-center">
+    <label className="form-label me-md-2 mb-1 mb-md-0">Data di nascita:</label>
+    <input
+      type="date"
+      className="form-control"
+      value={item.dataNascita || ""}
+      onChange={(e) => aggiornaInfo(item.id, { dataNascita: e.target.value })}
+    />
+  </div>
+</div>
 
-<label>Cognome:</label>
-<input
-  type="text"
-  value={item.cognome || ""}
-  onChange={(e) => aggiornaInfo(item.id, { cognome: e.target.value })}
-/>
-
-<label>Data di nascita:</label>
-<input
-  type="date"
-  value={item.dataNascita || ""}
-  onChange={(e) => aggiornaInfo(item.id, { dataNascita: e.target.value })}
-/>
-            <p>Totale: €{prezzo}</p>
-            <button onClick={() => eliminaTicket(item.id)}>Elimina</button>
+              <div className="mt-3 d-flex justify-content-between align-items-center">
+                <strong>Totale: €{prezzo}</strong>
+                <button className="btn btn-danger btn-sm" onClick={() => eliminaTicket(item.id)}>
+                  Elimina
+                </button>
+              </div>
+            </div>
           </div>
         );
       })}
 
-      <h2 style={{ marginTop: "20px" }}>Totale Carrello: €{totaleCarrello}</h2>
-
       {itemCarrello.length > 0 && (
-        <button onClick={svuotaCarrello} style={{ marginTop: "20px" }}>
-          Svuota Carrello
-        </button>
+        <div className="d-flex justify-content-between align-items-center mt-4">
+          <h4>Totale Carrello: €{totaleCarrello}</h4>
+          <button className="btn btn-warning" onClick={svuotaCarrello}>
+            Svuota Carrello
+          </button>
+        </div>
       )}
     </div>
   );

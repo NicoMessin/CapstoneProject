@@ -46,6 +46,13 @@ function Shop() {
   const handleCompra = (item) => {
     const token = localStorage.getItem("token");
 
+    // Se non sei loggato, reindirizza al login
+  if (!token) {
+     alert("Per acquistare un prodotto è necessario fare prima il login.");
+    navigate("/auth/Login");
+    return;
+  }
+
     fetch("http://localhost:3001/carrelloItemsShop", {
       method: "POST",
       headers: {

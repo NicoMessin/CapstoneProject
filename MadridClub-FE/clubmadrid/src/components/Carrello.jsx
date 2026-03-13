@@ -80,64 +80,77 @@ function Carrello() {
   );
 
   return (
-    <div>
-      <h1>CARRELLO</h1>
-      {itemCarrello.length === 0 && <p>Il carrello è vuoto</p>}
+  <div className="container my-4">
+    <h1 className="mb-4">Carrello</h1>
 
-      {itemCarrello.map((item) => (
-        <div
-          key={item.id}
-          style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}
-        >
-          <h3>{item.prodotto.name_product}</h3>
-          <img
-            src={item.prodotto.imageUrl}
-            alt={item.prodotto.name_product}
-            width={100}
-          />
-          <p>Prezzo unitario: €{item.prodotto.price}</p>
+    {itemCarrello.length === 0 && <p>Il carrello è vuoto</p>}
 
-          <label>Taglia:</label>
-          <select
-            value={item.enumTaglia}
-            onChange={(e) =>
-              aggiornaItem(item.id, item.quantita, e.target.value)
-            }
-          >
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </select>
+    {itemCarrello.map((item) => (
+      <div key={item.id} className="card mb-3 shadow-sm">
+        <div className="row g-3 align-items-center p-3">
+          {/* Immagine */}
+          <div className="col-md-2 text-center">
+            <img
+              src={item.prodotto.imageUrl}
+              alt={item.prodotto.name_product}
+              className="img-fluid rounded"
+            />
+          </div>
 
-          <label>Quantità:</label>
-          <input
-            type="number"
-            value={item.quantita}
-            min="1"
-            onChange={(e) =>
-              aggiornaItem(item.id, parseInt(e.target.value), item.enumTaglia)
-            }
-          />
+          {/* Info prodotto */}
+          <div className="col-md-6">
+            <h5 className="card-title">{item.prodotto.name_product}</h5>
+            <p className="mb-1">Prezzo unitario: <strong>€{item.prodotto.price}</strong></p>
 
-          <p>Totale: €{item.prodotto.price * item.quantita}</p>
-          <button onClick={() => eliminaItem(item.id)}>Elimina</button>
+            <div className="row g-2">
+              <div className="col-6 col-md-4">
+                <label className="form-label">Taglia</label>
+                <select
+                  className="form-select"
+                  value={item.enumTaglia}
+                  onChange={(e) => aggiornaItem(item.id, item.quantita, e.target.value)}
+                >
+                  {["XS","S","M","L","XL","XXL"].map((taglia) => (
+                    <option key={taglia} value={taglia}>{taglia}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-6 col-md-4">
+                <label className="form-label">Quantità</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={item.quantita}
+                  min="1"
+                  onChange={(e) => aggiornaItem(item.id, parseInt(e.target.value), item.enumTaglia)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Totale e pulsante */}
+          <div className="col-md-4 d-flex flex-column align-items-end justify-content-between">
+            <p className="mb-2">Totale: <strong>€{item.prodotto.price * item.quantita}</strong></p>
+            <button className="btn btn-danger btn-sm" onClick={() => eliminaItem(item.id)}>
+              Elimina
+            </button>
+          </div>
         </div>
-      ))}
+      </div>
+    ))}
 
-      {/* 🔹 Totale globale */}
-      <h2 style={{ marginTop: "20px" }}>Totale Carrello: €{totaleCarrello}</h2>
-
-      {/* 🔹 Pulsante svuota carrello */}
-      {itemCarrello.length > 0 && (
-        <button onClick={svuotaCarrello} style={{ marginTop: "20px" }}>
+    {/* Totale globale */}
+    {itemCarrello.length > 0 && (
+      <div className="d-flex justify-content-between align-items-center mt-4">
+        <h4>Totale Carrello: €{totaleCarrello}</h4>
+        <button className="btn btn-warning" onClick={svuotaCarrello}>
           Svuota Carrello
         </button>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 }
 
 export default Carrello;
