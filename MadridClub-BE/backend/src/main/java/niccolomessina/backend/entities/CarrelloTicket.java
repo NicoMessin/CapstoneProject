@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.util.UUID;
 
 @Entity
@@ -41,4 +40,7 @@ public class CarrelloTicket {
         this.utente= utente;
         this.ticket= ticket;
     }
+
+
+
 }

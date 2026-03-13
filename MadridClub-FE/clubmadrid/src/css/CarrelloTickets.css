@@ -1,0 +1,29 @@
+.ticket-card {
+  border: 1px solid gray;
+  margin: 10px;
+  padding: 10px;
+}
+
+.posti-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 5px 0;
+}
+
+.posto {
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  cursor: pointer;
+  background-color: white;
+}
+
+.posto.occupato {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+.posto.selezionato {
+  background-color: green;
+}

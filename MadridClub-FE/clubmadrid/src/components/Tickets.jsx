@@ -44,28 +44,67 @@ function Tickets() {
 
   // aggiungi al carrello
   const handleCompra = (item) => {
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:3001/carrelloTickets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        enumSettore: "FONDO_SUR",
-        enumFila: "FILA_1",
-        enumPosto: "A",
-        ticketId: item.id,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Errore aggiunta al carrello");
-        return res.json();
-      })
-      .then(() => fetchCartCount())
-      .catch((err) => console.error(err));
-  };
+  const token = localStorage.getItem("token");
 
+  // Fetch del carrello aggiornato
+  fetch("http://localhost:3001/carrelloTickets/mio", {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Errore fetching carrello");
+      return res.json();
+    })
+    .then((carrello) => {
+      // Conta quanti biglietti dello stesso ticket ci sono già
+      const bigliettiMioTicket = carrello.filter(i => i.ticket.id === item.id).length;
+
+      // Se già ce ne sono 5, blocca
+      if (bigliettiMioTicket >= 5) {
+        alert("Non puoi acquistare più di 5 biglietti per la stessa partita con lo stesso account.");
+        throw new Error("Limite biglietti superato");
+      }
+
+      // Fetch dei posti disponibili
+      return fetch(`http://localhost:3001/carrelloTickets/postiDisponibili/${item.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error("Errore fetching posti disponibili");
+      return res.json();
+    })
+    .then((posti) => {
+      // Trova prima fila disponibile e primo posto libero
+      const filaDisponibile = Object.keys(posti).find(f => posti[f]?.length > 0);
+      if (!filaDisponibile) {
+        alert("Non ci sono più posti disponibili per questo ticket!");
+        throw new Error("Posti esauriti");
+      }
+
+      const posto = posti[filaDisponibile][0];
+
+      // Aggiungi al carrello
+      return fetch("http://localhost:3001/carrelloTickets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          enumSettore: "FONDO_SUR",
+          enumFila: filaDisponibile,
+          enumPosto: posto,
+          ticketId: item.id,
+        }),
+      });
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error("Errore aggiunta al carrello");
+      return res.json();
+    })
+    .then(() => fetchCartCount())
+    .catch((err) => console.error(err));
+};
   if (loading) return <p>Caricamento in corso...</p>;
   if (!loading && ticket.length === 0) return <p>Impossibile caricare i tickets.</p>;
 

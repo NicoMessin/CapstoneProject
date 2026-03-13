@@ -35,4 +35,18 @@ public class Ticket {
         this.stadium = stadium;
         this.price = price;
     }
+
+    // PREZZO CHE VARIA IN BASE AL SETTORE
+    public BigDecimal getPrezzoBySettore(EnumSettore settore) {
+        return switch (settore) {
+            case LATERAL_ESTE -> BigDecimal.valueOf(60);
+            case LATERAL_OESTE -> BigDecimal.valueOf(60);
+            case FONDO_SUR -> BigDecimal.valueOf(40);
+            case FONDO_NORTE -> BigDecimal.valueOf(40);
+            case VIP_BOXES -> BigDecimal.valueOf(200);
+            case ZONA_PRENSA -> BigDecimal.valueOf(80);
+            case PISTA -> BigDecimal.valueOf(150);
+            case PMR, APMR -> BigDecimal.valueOf(250);
+        };
+    }
 }

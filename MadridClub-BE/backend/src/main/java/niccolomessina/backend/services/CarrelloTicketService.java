@@ -10,6 +10,7 @@ import niccolomessina.backend.repositories.TicketRepository;
 import niccolomessina.backend.repositories.UtenteRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,23 @@ public class CarrelloTicketService {
         public CarrelloTicket saveCarrelloTicket(CarrelloTicketsDTO payload, Utente utente) {
             Ticket ticket = ticketRepository.findById(payload.ticketId())
             .orElseThrow(() -> new IllegalArgumentException("Ticket non trovato"));
+
+            // CONTROLLO SE TICKET GIA' PRESO QUEL POSTO PRECISO
+            boolean postoGiaPrenotato = carrelloTicketRepository.existsByTicketIdAndEnumSettoreAndEnumFilaAndEnumPosto(
+                    ticket.getId(),
+                    payload.enumSettore(),
+                    payload.enumFila(),
+                    payload.enumPosto()
+            );
+
+            if (postoGiaPrenotato) {
+                throw new IllegalArgumentException("Biglietto già prenotato per questo posto");
+            }
+
+
+            // CALCOLO PREZZO IN BASE AL SETTORE
+            BigDecimal prezzo = ticket.getPrezzoBySettore(payload.enumSettore());
+
             CarrelloTicket nuovoCarrelloTicket = new CarrelloTicket(payload.enumSettore(), payload.enumFila(), payload.enumPosto(), utente, ticket);
             return  carrelloTicketRepository.save(nuovoCarrelloTicket);
     }
@@ -54,4 +72,12 @@ public class CarrelloTicketService {
     public void  svuotaCarrello(Utente utente){
         carrelloTicketRepository.deleteAllByUtenteId(utente.getId());
     }
+
+
+    //POSTI OCCUPATI
+    public List<CarrelloTicket> findPostiOccupati(UUID ticketId){
+        return carrelloTicketRepository.findByTicketId(ticketId);
+    }
+
+
 }

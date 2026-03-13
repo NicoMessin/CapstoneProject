@@ -55,4 +55,22 @@ public class CarrelloTicketsController {
     //ELIMINA UN TICKET
     @DeleteMapping("/{id}")
     public void eliminaTicket (@PathVariable UUID id){ carrelloTicketService.deleteCarrelloTicket(id);}
+
+    //OCCUPATI
+    @GetMapping("/occupati/{ticketId}")
+    public List<CarrelloTicket> postiOccupati(@PathVariable UUID ticketId){
+        return carrelloTicketService.findPostiOccupati(ticketId);
+    }
+
+    @GetMapping("/postiDisponibili/{ticketId}")
+    public List<String> postiDisponibili(@PathVariable UUID ticketId) {
+        List<CarrelloTicket> occupati = carrelloTicketService.findPostiOccupati(ticketId);
+        List<String> postiTutti = List.of("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R");
+
+        // Filtra i posti occupati
+        return postiTutti.stream()
+                .filter(posto -> occupati.stream()
+                        .noneMatch(c -> c.getEnumPosto().name().equals(posto)))
+                .toList();
+    }
 }
