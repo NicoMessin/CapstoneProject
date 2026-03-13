@@ -91,6 +91,23 @@ function CarrelloTickets() {
       .catch((err) => console.error(err));
   };
 
+  const aggiornaInfo = (id, campo) => {
+  const token = localStorage.getItem("token");
+  fetch(`http://localhost:3001/carrelloTickets/updateInfo/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(campo),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Errore aggiornamento info ticket");
+      fetchCarrello();
+    })
+    .catch((err) => console.error(err));
+};
+
   const totaleCarrello = itemCarrello.reduce(
     (sum, item) => sum + prezziSettore[item.enumSettore],
     0
@@ -172,7 +189,26 @@ function CarrelloTickets() {
                 );
               })}
             </select>
+<label>Nome:</label>
+<input
+  type="text"
+  value={item.nome || ""}
+  onChange={(e) => aggiornaInfo(item.id, { nome: e.target.value })}
+/>
 
+<label>Cognome:</label>
+<input
+  type="text"
+  value={item.cognome || ""}
+  onChange={(e) => aggiornaInfo(item.id, { cognome: e.target.value })}
+/>
+
+<label>Data di nascita:</label>
+<input
+  type="date"
+  value={item.dataNascita || ""}
+  onChange={(e) => aggiornaInfo(item.id, { dataNascita: e.target.value })}
+/>
             <p>Totale: €{prezzo}</p>
             <button onClick={() => eliminaTicket(item.id)}>Elimina</button>
           </div>

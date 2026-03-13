@@ -1,9 +1,11 @@
 package niccolomessina.backend.payloads;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import niccolomessina.backend.entities.EnumFila;
 import niccolomessina.backend.entities.EnumPosto;
 import niccolomessina.backend.entities.EnumSettore;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record CarrelloTicketsDTO (
@@ -14,7 +16,13 @@ public record CarrelloTicketsDTO (
         @NotNull(message = "Il posto è obbligatorio")
         EnumPosto enumPosto,
         @NotNull(message = "L'id del ticket è obbligatorio")
-        UUID ticketId
+        UUID ticketId,
+
+        String nome,
+
+        String cognome,
+        
+        LocalDate dataNascita
 ) {
 
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -33,12 +35,19 @@ public class CarrelloTicket {
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
-    public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket){
+    private String nome;
+    private String cognome;
+    private LocalDate dataNascita;
+
+    public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket,String nome, String cognome, LocalDate dataNascita){
         this.enumSettore= enumSettore;
         this.enumFila= enumFila;
         this.enumPosto= enumPosto;
         this.utente= utente;
         this.ticket= ticket;
+        this.nome= nome;
+        this.cognome= cognome;
+        this.dataNascita= dataNascita;
     }
 
 

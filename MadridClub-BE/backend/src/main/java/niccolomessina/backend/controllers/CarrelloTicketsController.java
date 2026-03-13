@@ -73,4 +73,9 @@ public class CarrelloTicketsController {
                         .noneMatch(c -> c.getEnumPosto().name().equals(posto)))
                 .toList();
     }
+
+    @PutMapping("/updateInfo/{id}")
+    public CarrelloTicket aggiornaInfo(@PathVariable UUID id, @RequestBody CarrelloTicketsDTO dto) {
+        return carrelloTicketService.aggiornaInfo(id, dto);
+    }
 }

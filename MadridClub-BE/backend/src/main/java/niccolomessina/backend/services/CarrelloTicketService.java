@@ -31,6 +31,7 @@ public class CarrelloTicketService {
             .orElseThrow(() -> new IllegalArgumentException("Ticket non trovato"));
 
             // CONTROLLO SE TICKET GIA' PRESO QUEL POSTO PRECISO
+            // Controllo se lo stesso posto è già stato preso
             boolean postoGiaPrenotato = carrelloTicketRepository.existsByTicketIdAndEnumSettoreAndEnumFilaAndEnumPosto(
                     ticket.getId(),
                     payload.enumSettore(),
@@ -46,7 +47,9 @@ public class CarrelloTicketService {
             // CALCOLO PREZZO IN BASE AL SETTORE
             BigDecimal prezzo = ticket.getPrezzoBySettore(payload.enumSettore());
 
-            CarrelloTicket nuovoCarrelloTicket = new CarrelloTicket(payload.enumSettore(), payload.enumFila(), payload.enumPosto(), utente, ticket);
+            CarrelloTicket nuovoCarrelloTicket = new CarrelloTicket(payload.enumSettore(), payload.enumFila(), payload.enumPosto(), utente, ticket, payload.nome(),
+                    payload.cognome(),
+                    payload.dataNascita());
             return  carrelloTicketRepository.save(nuovoCarrelloTicket);
     }
 
@@ -77,6 +80,17 @@ public class CarrelloTicketService {
     //POSTI OCCUPATI
     public List<CarrelloTicket> findPostiOccupati(UUID ticketId){
         return carrelloTicketRepository.findByTicketId(ticketId);
+    }
+
+    public CarrelloTicket aggiornaInfo(UUID id, CarrelloTicketsDTO dto) {
+        CarrelloTicket ticket = carrelloTicketRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Item non trovato"));
+
+        if (dto.nome() != null) ticket.setNome(dto.nome());
+        if (dto.cognome() != null) ticket.setCognome(dto.cognome());
+        if (dto.dataNascita() != null) ticket.setDataNascita(dto.dataNascita());
+
+        return carrelloTicketRepository.save(ticket);
     }
 
 

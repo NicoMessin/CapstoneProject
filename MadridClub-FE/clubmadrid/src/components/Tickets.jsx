@@ -7,6 +7,7 @@ function Tickets() {
   const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
 
   // fetch tickets
   useEffect(() => {
