@@ -153,7 +153,7 @@ function Home() {
               indicators={false}
               className="carousel-peek d-none d-md-block"
             >
-              {news.slice(17, 19).map((item) => (
+              {news.slice(17, 20).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
                     <Card style={{ width: "18rem" }} className="rounded-4 cardHomeImage">

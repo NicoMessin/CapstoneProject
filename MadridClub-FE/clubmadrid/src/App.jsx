@@ -12,6 +12,9 @@ import FormRegister from "./components/FormRegister";
 import Dashboard from "./components/Dashboard";
 import Carrello from "./components/Carrello";
 import CarrelloTickets from "./components/CarrelloTickets";
+import AdminPanel from "./components/AdminPanel";
+import AdminNews from "./components/AdminNews";
+import AdminShop from "./components/AdminShop";
 
 
 
@@ -32,6 +35,9 @@ function App() {
       {/* PAGINE */}
       <Routes>
 
+        <Route path="/adminShop" element={<AdminShop />} />
+        <Route path="/adminNews" element={<AdminNews />} />
+        <Route path="/admin-panel" element={<AdminPanel />} />
         <Route path="/carrelloTickets" element={<CarrelloTickets />} />
         <Route path="/carrelloItemsShop" element={<Carrello />} />
         <Route path="/dashboard" element={<Dashboard />} />
