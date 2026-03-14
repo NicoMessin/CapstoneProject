@@ -15,6 +15,7 @@ import CarrelloTickets from "./components/CarrelloTickets";
 import AdminPanel from "./components/AdminPanel";
 import AdminNews from "./components/AdminNews";
 import AdminShop from "./components/AdminShop";
+import AdminTickets from "./components/AdminTickets";
 
 
 
@@ -35,6 +36,7 @@ function App() {
       {/* PAGINE */}
       <Routes>
 
+        <Route path="/adminTickets" element={<AdminTickets />} />
         <Route path="/adminShop" element={<AdminShop />} />
         <Route path="/adminNews" element={<AdminNews />} />
         <Route path="/admin-panel" element={<AdminPanel />} />
