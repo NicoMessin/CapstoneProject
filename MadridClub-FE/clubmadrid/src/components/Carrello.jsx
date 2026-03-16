@@ -2,85 +2,133 @@ import { useEffect, useState } from "react";
 
 function Carrello() {
   const [itemCarrello, setItemCarrello] = useState([]);
-
+  
   const fetchCarrello = () => {
     const token = localStorage.getItem("token");
-
+    
     fetch("http://localhost:3001/carrelloItemsShop/mio", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject("Errore fetching carrello")
-      )
-      .then((data) => setItemCarrello(data))
-      .catch((err) => console.error(err));
-  };
+    .then((res) =>
+      res.ok ? res.json() : Promise.reject("Errore fetching carrello")
+  )
+  .then((data) => setItemCarrello(data))
+  .catch((err) => console.error(err));
+};
 
-  useEffect(() => {
-    fetchCarrello();
-  }, []);
+useEffect(() => {
+  fetchCarrello();
+}, []);
 
-  const aggiornaItem = (id, quantita, taglia) => {
-    const token = localStorage.getItem("token");
+const aggiornaItem = (id, quantita, taglia) => {
+  const token = localStorage.getItem("token");
 
-    fetch(
-      `http://localhost:3001/carrelloItemsShop/${id}?quantita=${quantita}&taglia=${taglia}`,
-      {
-        method: "PUT",
+  fetch(
+    `http://localhost:3001/carrelloItemsShop/${id}?quantita=${quantita}&taglia=${taglia}`,
+    {
+      method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     )
-      .then((res) => {
+    .then((res) => {
         if (!res.ok) throw new Error("Errore aggiornamento item");
         fetchCarrello();
       })
       .catch((err) => console.error(err));
-  };
-
-  const eliminaItem = (id) => {
-    const token = localStorage.getItem("token");
-
-    fetch(`http://localhost:3001/carrelloItemsShop/${id}`, {
-      method: "DELETE",
+    };
+    
+    const eliminaItem = (id) => {
+      const token = localStorage.getItem("token");
+      
+      fetch(`http://localhost:3001/carrelloItemsShop/${id}`, {
+        method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Errore eliminazione item");
-        fetchCarrello();
-      })
+    .then((res) => {
+      if (!res.ok) throw new Error("Errore eliminazione item");
+      fetchCarrello();
+    })
       .catch((err) => console.error(err));
-  };
-
-  const svuotaCarrello = () => {
-    const token = localStorage.getItem("token");
-
-    fetch("http://localhost:3001/carrelloItemsShop/mio", {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    };
+    
+    const svuotaCarrello = () => {
+      const token = localStorage.getItem("token");
+      
+      fetch("http://localhost:3001/carrelloItemsShop/mio", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
     })
       .then((res) => {
         if (!res.ok) throw new Error("Errore svuotamento carrello");
         fetchCarrello();
       })
       .catch((err) => console.error(err));
+    };
+
+    // 🔹 Calcolo totale globale
+    const totaleCarrello = itemCarrello.reduce(
+      (sum, item) => sum + item.prodotto.price * item.quantita,
+      0
+    );
+    
+    
+    //STRIPE
+    const paga = () => {
+      const token = localStorage.getItem("token");
+      const items = itemCarrello.map(item => ({
+        name: item.prodotto.name_product,
+        price: item.prodotto.price,
+        quantity: item.quantita
+      }));
+      
+      fetch("http://localhost:3001/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify(items)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Errore creazione sessione pagamento");
+        return res.json();
+      })
+      .then(data => {
+        window.location.href = data.url;
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Errore durante il pagamento");
+      });
   };
-
-  // 🔹 Calcolo totale globale
-  const totaleCarrello = itemCarrello.reduce(
-    (sum, item) => sum + item.prodotto.price * item.quantita,
-    0
-  );
-
+  
+  // 🔹 Controllo successUrl per alert e svuotamento carrello
+  
+  
+  
+  useEffect(() => {
+    
+  if (window.location.pathname === "/success") {
+    alert("Pagamento andato a buon fine ");
+  
+    // svuota carrello backend
+    fetch("http://localhost:3001/carrelloItemsShop/mio", {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    }).catch(err => console.error(err));
+  
+    // svuota localStorage se lo usi
+    localStorage.removeItem("carrello");
+    
+  }
+  }, []);
   return (
-  <div className="container my-4">
+    <div className="container my-4">
     <h1 className="mb-4">Carrello</h1>
 
     {itemCarrello.length === 0 && <p>Il carrello è vuoto</p>}
@@ -148,7 +196,11 @@ function Carrello() {
           Svuota Carrello
         </button>
       </div>
+      
     )}
+    <button className="btn btn-success" onClick={paga}>
+  Procedi al pagamento
+</button>
   </div>
 );
 }

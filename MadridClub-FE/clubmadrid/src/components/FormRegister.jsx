@@ -40,7 +40,8 @@ function FormRegister() {
   localStorage.removeItem("token");
 
   // naviga al login
-  navigate('/auth/login');
+  navigate('/auth/login'); window.location.reload(); 
+
 
 })
     .catch(err => alert(err.message));
