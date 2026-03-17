@@ -17,6 +17,7 @@ import AdminNews from "./components/AdminNews";
 import AdminShop from "./components/AdminShop";
 import AdminTickets from "./components/AdminTickets";
 import Success from "./components/succes";
+import MyTickets from "./components/MyTickets";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
 
       {/* PAGINE */}
       <Routes>
+        <Route path="/myTickets" element={< MyTickets/>} />
         <Route path="/success" element={< Success/>} />
         <Route path="/adminTickets" element={<AdminTickets />} />
         <Route path="/adminShop" element={<AdminShop />} />

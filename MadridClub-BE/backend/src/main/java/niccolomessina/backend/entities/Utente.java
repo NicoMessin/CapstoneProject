@@ -42,6 +42,7 @@ public class Utente implements UserDetails {
     private TipoUtente tipoUtente;
     private String ruolo;
 
+
     public Utente(String username, String email, String password,
                   String nome, String cognome, TipoUtente tipoUtente) {
         this.username = username;

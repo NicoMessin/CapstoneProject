@@ -107,7 +107,6 @@ function CarrelloTickets() {
 
 //STRIPE
 const paga = () => {
-
   const items = itemCarrello.map(item => ({
     settore: item.enumSettore,
     price: prezziSettore[item.enumSettore],
@@ -115,12 +114,19 @@ const paga = () => {
     partita: item.ticket.opponents
   }));
 
-  fetch("http://localhost:3001/stripe/checkout-tickets", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(items)
+  const token = localStorage.getItem("token"); // recupera token dal login
+  if (!token) {
+    alert("Devi prima effettuare il login!");
+    return;
+  }
+fetch("http://localhost:3001/stripe/checkout-tickets", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + localStorage.getItem("token")
+  },
+  body: JSON.stringify(items)
+
   })
   .then(res => {
     if (!res.ok) throw new Error("Errore pagamento");
@@ -131,8 +137,6 @@ const paga = () => {
   })
   .catch(err => console.error(err));
 };
-
-
 
   const totaleCarrello = itemCarrello.reduce(
     (sum, item) => sum + prezziSettore[item.enumSettore],

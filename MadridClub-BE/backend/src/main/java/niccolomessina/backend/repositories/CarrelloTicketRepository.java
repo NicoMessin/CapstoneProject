@@ -18,4 +18,6 @@ public interface CarrelloTicketRepository extends JpaRepository<CarrelloTicket, 
     boolean existsByTicketIdAndEnumSettoreAndEnumFilaAndEnumPosto(
             UUID ticketId, EnumSettore settore, EnumFila fila, EnumPosto posto
     );
+
+
 }

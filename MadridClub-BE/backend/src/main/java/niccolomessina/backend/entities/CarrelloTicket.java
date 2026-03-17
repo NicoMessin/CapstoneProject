@@ -38,8 +38,9 @@ public class CarrelloTicket {
     private String nome;
     private String cognome;
     private LocalDate dataNascita;
+    private Boolean acquistato;
 
-    public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket,String nome, String cognome, LocalDate dataNascita){
+    public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket,String nome, String cognome, LocalDate dataNascita, Boolean acquistato){
         this.enumSettore= enumSettore;
         this.enumFila= enumFila;
         this.enumPosto= enumPosto;
@@ -48,6 +49,7 @@ public class CarrelloTicket {
         this.nome= nome;
         this.cognome= cognome;
         this.dataNascita= dataNascita;
+        this.acquistato= acquistato;
     }
 
 

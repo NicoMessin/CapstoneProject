@@ -16,5 +16,6 @@ public record UtentiDTO(
         String nome,
         String cognome,
         String tipoUtente
+
 ) {
 }

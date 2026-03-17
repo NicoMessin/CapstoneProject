@@ -70,6 +70,7 @@ function UpperBar() {
         <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
         <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
+        <Dropdown.Item href="/myTickets">My Tickets</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
     {/* Desktop */}
@@ -85,6 +86,7 @@ function UpperBar() {
          <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
         <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
+        <Dropdown.Item href="/myTickets">My Tickets</Dropdown.Item>
         
       </Dropdown.Menu>
     </Dropdown>

@@ -78,4 +78,25 @@ public class CarrelloTicketsController {
     public CarrelloTicket aggiornaInfo(@PathVariable UUID id, @RequestBody CarrelloTicketsDTO dto) {
         return carrelloTicketService.aggiornaInfo(id, dto);
     }
+
+
+    //PROVA
+    @PostMapping("/conferma-acquisto")
+    public List<CarrelloTicket> confermaAcquisto(@AuthenticationPrincipal Utente utente) {
+        List<CarrelloTicket> carrello = carrelloTicketService.findUtenteCarrelloTickets(utente.getId());
+
+        // Segna come acquistato tutti i ticket del carrello
+        List<CarrelloTicket> acquistati = carrelloTicketService.confermaAcquisto(carrello);
+
+        // Svuota il carrello
+        carrelloTicketService.svuotaCarrello(utente);
+
+        return acquistati;
+    }
+
+    // Restituisce solo i ticket acquistati per MyTickets
+    @GetMapping("/mieiTickets")
+    public List<CarrelloTicket> getMieiTickets(@AuthenticationPrincipal Utente utente){
+        return carrelloTicketService.findAcquistatiUtente(utente.getId());
+    }
 }

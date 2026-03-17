@@ -22,7 +22,9 @@ public record CarrelloTicketsDTO (
 
         String cognome,
         
-        LocalDate dataNascita
+        LocalDate dataNascita,
+
+        Boolean acquistato
 ) {
 
 }

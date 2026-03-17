@@ -49,7 +49,7 @@ public class CarrelloTicketService {
 
             CarrelloTicket nuovoCarrelloTicket = new CarrelloTicket(payload.enumSettore(), payload.enumFila(), payload.enumPosto(), utente, ticket, payload.nome(),
                     payload.cognome(),
-                    payload.dataNascita());
+                    payload.dataNascita(), payload.acquistato());
             return  carrelloTicketRepository.save(nuovoCarrelloTicket);
     }
 
@@ -92,6 +92,26 @@ public class CarrelloTicketService {
 
         return carrelloTicketRepository.save(ticket);
     }
+
+    //PROVA
+    @Transactional
+    public List<CarrelloTicket> confermaAcquisto(List<CarrelloTicket> carrello) {
+        for (CarrelloTicket ticket : carrello) {
+            ticket.setAcquistato(true);  // aggiungi il campo booleano acquistato in CarrelloTicket
+            carrelloTicketRepository.save(ticket);
+        }
+        return carrello;
+    }
+
+    //FIND ALL PER MOSTRARE I TICKET ACQUISTATI DELL'UTENTE
+
+    public List<CarrelloTicket> findAcquistatiUtente(UUID utenteId) {
+        return carrelloTicketRepository.findByUtenteIdOrderByIdAsc(utenteId)
+                .stream()
+                .filter(CarrelloTicket::getAcquistato) // prendi solo quelli acquistati
+                .toList();
+    }
+
 
 
 }
