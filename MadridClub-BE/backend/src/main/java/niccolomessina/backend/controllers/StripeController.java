@@ -42,7 +42,7 @@ public class StripeController {
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:5173/success")
+                .setSuccessUrl("http://localhost:5173/success?type=shop")
                 .setCancelUrl("http://localhost:5173/carrelloItemsShop")
                 .addAllLineItem(lineItems)
                 .build();

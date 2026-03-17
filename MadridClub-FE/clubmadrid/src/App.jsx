@@ -3,7 +3,7 @@ import "./css/App.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Tickets from "./components/Tickets"
+import Tickets from "./components/Tickets";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
 import UpperBar from "./components/UpperBar";
@@ -16,26 +16,19 @@ import AdminPanel from "./components/AdminPanel";
 import AdminNews from "./components/AdminNews";
 import AdminShop from "./components/AdminShop";
 import AdminTickets from "./components/AdminTickets";
-
-
-
-
+import Success from "./components/succes";
 
 
 function App() {
   return (
     <BrowserRouter>
-
       {/* MOBILE fino a lg */}
-      
-       <UpperBar/>
-     
 
-     
+      <UpperBar />
 
       {/* PAGINE */}
       <Routes>
-
+        <Route path="/success" element={< Success/>} />
         <Route path="/adminTickets" element={<AdminTickets />} />
         <Route path="/adminShop" element={<AdminShop />} />
         <Route path="/adminNews" element={<AdminNews />} />
@@ -46,10 +39,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/shop" element={<Shop />} />
-        <Route path="/auth/login" element={<FormLogin/>} />
-        <Route path="/auth/register" element={<FormRegister/>} />
+        <Route path="/auth/login" element={<FormLogin />} />
+        <Route path="/auth/register" element={<FormRegister />} />
       </Routes>
-
     </BrowserRouter>
   );
 }

@@ -111,22 +111,7 @@ const aggiornaItem = (id, quantita, taglia) => {
   
   
   
-  useEffect(() => {
-    
-  if (window.location.pathname === "/success") {
-    alert("Pagamento andato a buon fine ");
-  
-    // svuota carrello backend
-    fetch("http://localhost:3001/carrelloItemsShop/mio", {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    }).catch(err => console.error(err));
-  
-    // svuota localStorage se lo usi
-    localStorage.removeItem("carrello");
-    
-  }
-  }, []);
+
   return (
     <div className="container my-4">
     <h1 className="mb-4">Carrello</h1>

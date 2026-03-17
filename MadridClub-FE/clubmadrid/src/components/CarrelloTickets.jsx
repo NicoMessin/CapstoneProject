@@ -105,6 +105,35 @@ function CarrelloTickets() {
       .catch((err) => console.error(err));
   };
 
+//STRIPE
+const paga = () => {
+
+  const items = itemCarrello.map(item => ({
+    settore: item.enumSettore,
+    price: prezziSettore[item.enumSettore],
+    quantity: 1,
+    partita: item.ticket.opponents
+  }));
+
+  fetch("http://localhost:3001/stripe/checkout-tickets", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(items)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Errore pagamento");
+    return res.json();
+  })
+  .then(data => {
+    window.location.href = data.url;
+  })
+  .catch(err => console.error(err));
+};
+
+
+
   const totaleCarrello = itemCarrello.reduce(
     (sum, item) => sum + prezziSettore[item.enumSettore],
     0
@@ -239,7 +268,11 @@ function CarrelloTickets() {
           <button className="btn btn-warning" onClick={svuotaCarrello}>
             Svuota Carrello
           </button>
+          <button className="btn btn-success" onClick={paga}>
+  Procedi al pagamento
+</button>
         </div>
+        
       )}
     </div>
   );
