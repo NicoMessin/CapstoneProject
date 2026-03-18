@@ -49,6 +49,7 @@ function AdminNews() {
 
   // DELETE NEWS
   const deleteNews = (id) => {
+    if (!window.confirm("Sei sicuro di voler eliminare questa news?")) return;
     fetch(`http://localhost:3001/news/${id}`, {
       method: "DELETE",
       headers: {

@@ -14,6 +14,7 @@ const [form, setForm] = useState({
   stadium: "",
   price: ""
 })
+const [editingId, setEditingId] = useState(null);
 
 // GET TICKETS
 const getTickets = () => {
@@ -27,33 +28,33 @@ useEffect(() => {
   getTickets()
 }, [])
 
-// AGGIUNGI TICKET
-const handleSubmit = (e) => {
-  e.preventDefault()
+ // AGGIUNGI / MODIFICA TICKET
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const url = editingId
+      ? `http://localhost:3001/tickets/${editingId}`
+      : "http://localhost:3001/tickets";
+    const method = editingId ? "PUT" : "POST";
 
-  fetch("http://localhost:3001/tickets", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token")
-    },
-    body: JSON.stringify(form)
-  })
-  .then(() => {
-    getTickets()
-    setForm({
-      day: "",
-      date: "",
-      opponents: "",
-      stadium: "",
-      price: ""
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token")
+      },
+      body: JSON.stringify(form)
     })
-  })
-  .catch(err => console.log(err))
-}
+    .then(() => {
+      getTickets();
+      setForm({ day: "", date: "", opponents: "", stadium: "", price: "" });
+      setEditingId(null); // reset form
+    })
+    .catch(err => console.log(err));
+  }
 
 // DELETE TICKET
 const deleteTicket = (id) => {
+   if (!window.confirm("Sei sicuro di voler eliminare questo ticket?")) return;
   fetch(`http://localhost:3001/tickets/${id}`, {
     method: "DELETE",
     headers: {
@@ -63,6 +64,17 @@ const deleteTicket = (id) => {
   .then(() => getTickets())
   .catch(err => console.log(err))
 }
+// INIZIA MODIFICA
+  const editTicket = (n) => {
+    setForm({
+      day: n.day,
+      date: n.date,
+      opponents: n.opponents,
+      stadium: n.stadium,
+      price: n.price
+    });
+    setEditingId(n.id);
+  }
 
 return(
 <>
@@ -114,22 +126,30 @@ onChange={(e)=>setForm({...form, stadium:e.target.value})}
 
 <input
 type="number"
+placeholder="Price"
 step="0.01"
 value={form.price}
 onChange={(e)=>setForm({...form, price:Number(e.target.value)})}
 />
 
-<button type="submit">Aggiungi</button>
+ <button type="submit">{editingId ? "Salva Modifiche" : "Aggiungi"}</button>
+          {editingId && (
+            <button type="button" onClick={() => { 
+              setForm({ day: "", date: "", opponents: "", stadium: "" , price:""});
+              setEditingId(null);
+            }}>Annulla</button>
+          )}
 
 </form>
 
 <h2>Lista Tickets</h2>
 
-{tickets.map(t => (
-<div key={t.id}>
-<h3>{t.day} - {t.opponents}</h3>
-<p>{t.stadium} | €{t.price}</p>
-<button onClick={()=>deleteTicket(t.id)}>Elimina</button>
+{tickets.map(n => (
+<div key={n.id}>
+<h3>{n.day} - {n.opponents}</h3>
+<p>{n.stadium} | €{n.price}</p>
+ <button onClick={() => editTicket(n)}>Modifica</button>
+<button onClick={() => deleteTicket(n.id)}>Elimina</button>
 </div>
 ))}
 

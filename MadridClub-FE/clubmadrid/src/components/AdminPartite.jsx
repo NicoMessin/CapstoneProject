@@ -10,9 +10,10 @@ function AdminPartite() {
     trasferta: "",
     data: "",
   });
+  const [editingId, setEditingId] = useState(null);
 
   // GET MATCH
-  const getMatches = () => {
+  const getPartite = () => {
     fetch("http://localhost:3001/partite")
       .then((res) => res.json())
       .then((data) => setMatch(data))
@@ -20,36 +21,56 @@ function AdminPartite() {
   };
 
   useEffect(() => {
-    getMatches();
+    getPartite();
   }, []);
 
-  // AGGIUNGI MATCH
+  // AGGIUNGI / MODIFICA NEWS
   const handleSubmit = (e) => {
     e.preventDefault();
+    const url = editingId
+      ? `http://localhost:3001/partite/${editingId}`
+      : "http://localhost:3001/partite";
+    const method = editingId ? "PUT" : "POST";
 
-    fetch("http://localhost:3001/partite", {
-      method: "POST",
+    fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: "Bearer " + localStorage.getItem("token")
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form)
     })
-      .then(() => getMatches())
-      .catch((err) => console.log(err));
-  };
+    .then(() => {
+      getPartite();
+      setForm({ casa: "", trasferta: "", data: ""});
+      setEditingId(null); // reset form
+    })
+    .catch(err => console.log(err));
+  }
 
   // DELETE MATCH
   const deleteMatch = (id) => {
+    if (!window.confirm("Sei sicuro di voler eliminare questa partita?")) return;
     fetch(`http://localhost:3001/partite/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     })
-      .then(() => getMatches())
+      .then(() => getPartite())
       .catch((err) => console.log(err));
   };
+
+  // INIZIA MODIFICA
+  const editTicket = (n) => {
+    setForm({
+      casa: n.casa,
+      trasfera: n.trasfera,
+      data: n.data,
+     
+    });
+    setEditingId(n.id);
+  }
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -89,7 +110,13 @@ function AdminPartite() {
             onChange={(e) => setForm({ ...form, data: e.target.value })}
           />
 
-          <button type="submit">Aggiungi</button>
+          <button type="submit">{editingId ? "Salva Modifiche" : "Aggiungi"}</button>
+          {editingId && (
+            <button type="button" onClick={() => { 
+              setForm({ casa: "", trasferta: "", data: "" });
+              setEditingId(null);
+            }}>Annulla</button>
+          )}
         </form>
 
         <h2>Lista Partite</h2>
@@ -99,6 +126,7 @@ function AdminPartite() {
             <span>{n.casa + " VS "}</span>
             <span>{n.trasferta + " : "}</span>
             <span className="me-2">{n.data}</span>
+            <button onClick={() => editTicket(n)}>Modifica</button>
             <button onClick={() => deleteMatch(n.id)}>Elimina</button>
           </div>
         ))}
