@@ -1,7 +1,9 @@
 package niccolomessina.backend.controllers;
 
+import niccolomessina.backend.entities.Product;
 import niccolomessina.backend.entities.Ticket;
 import niccolomessina.backend.entities.Utente;
+import niccolomessina.backend.payloads.ProductsDTO;
 import niccolomessina.backend.payloads.TicketsDTO;
 import niccolomessina.backend.services.TicketService;
 import org.springframework.http.HttpStatus;
@@ -47,4 +49,12 @@ public class TicketsController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void  deleteTicket(@PathVariable UUID id){ticketService.deleteTicket(id);}
+
+    //UPDATE
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Ticket editTicket(@PathVariable UUID id, @RequestBody @Validated TicketsDTO payload) {
+        return ticketService.updateTicket(id, payload);
+    }
+
 }

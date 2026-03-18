@@ -2,8 +2,10 @@ package niccolomessina.backend.services;
 
 import lombok.extern.slf4j.Slf4j;
 import niccolomessina.backend.entities.Match;
+import niccolomessina.backend.entities.Product;
 import niccolomessina.backend.exceptions.NotFoundException;
 import niccolomessina.backend.payloads.MatchesDTO;
+import niccolomessina.backend.payloads.ProductsDTO;
 import niccolomessina.backend.repositories.MatchRepository;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,18 @@ public class MatchService {
        Match match=  matchRepository.findById(id)
                .orElseThrow(() -> new NotFoundException(id));
        matchRepository.delete(match);
+    }
+
+    //UPDATE
+    public Match updateMatch(UUID id, MatchesDTO payload)
+    {
+        Match aggiornaMatch= findById(id);
+        aggiornaMatch.setCasa(payload.casa());
+        aggiornaMatch.setTrasferta(payload.trasferta());
+        aggiornaMatch.setData(payload.data());
+
+
+        return matchRepository.save(aggiornaMatch);
     }
 
 }

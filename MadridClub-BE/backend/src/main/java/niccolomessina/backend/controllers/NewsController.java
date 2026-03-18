@@ -58,4 +58,10 @@ public class NewsController {
     public void deleteNews(@PathVariable UUID id) {
         newsService.deleteNews(id);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public News editNews(@PathVariable UUID id, @RequestBody @Validated NewsDTO payload) {
+        return newsService.updateNews(id, payload);
+    }
 }

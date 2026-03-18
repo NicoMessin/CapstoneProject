@@ -1,9 +1,11 @@
 package niccolomessina.backend.controllers;
 
 import niccolomessina.backend.entities.Match;
+import niccolomessina.backend.entities.News;
 import niccolomessina.backend.entities.Product;
 import niccolomessina.backend.entities.Utente;
 import niccolomessina.backend.payloads.MatchesDTO;
+import niccolomessina.backend.payloads.NewsDTO;
 import niccolomessina.backend.services.MatchService;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.HttpStatus;
@@ -56,6 +58,11 @@ public class MatchesController {
         matchService.deleteMatch(id);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Match editMatch(@PathVariable UUID id, @RequestBody @Validated MatchesDTO payload) {
+        return matchService.updateMatch(id, payload);
+    }
 }
 
 

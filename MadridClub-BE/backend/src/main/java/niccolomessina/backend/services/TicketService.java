@@ -49,4 +49,15 @@ public class TicketService {
                 ticketRepository.delete(ticketDaEliminare);
     }
 
+    //UPDATE
+    public Ticket updateTicket(UUID id, TicketsDTO payload){
+        Ticket ticketEsistente = getTicketById(id);
+        ticketEsistente.setDay(payload.day());
+        ticketEsistente.setDate(payload.date());
+        ticketEsistente.setOpponents(payload.opponents());
+        ticketEsistente.setStadium(payload.stadium());
+        ticketEsistente.setPrice(payload.price());
+        return ticketRepository.save(ticketEsistente);
+    }
+
 }

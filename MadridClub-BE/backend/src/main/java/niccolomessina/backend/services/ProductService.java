@@ -46,4 +46,16 @@ public class ProductService {
         productRepository.delete(productDaEliminare);
     }
 
+    //UPDATE
+    public Product updateProduct(UUID id, ProductsDTO payload)
+    {
+        Product aggiornaProdotto= getProductById(id);
+        aggiornaProdotto.setName_product(payload.name_product());
+        aggiornaProdotto.setDescription(payload.description());
+        aggiornaProdotto.setPrice(payload.price());
+        aggiornaProdotto.setImageUrl(payload.imageUrl());
+
+        return productRepository.save(aggiornaProdotto);
+    }
+
 }

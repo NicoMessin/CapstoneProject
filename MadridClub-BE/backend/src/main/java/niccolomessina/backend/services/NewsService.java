@@ -54,4 +54,19 @@ public class NewsService {
             newsRepository.delete(news);
         }
     }
+
+    // MODIFICA NEWS
+    public News updateNews(UUID id, NewsDTO payload) {
+        // Cerco la news esistente
+        News newsEsistente = getNewsById(id);
+
+        // Aggiorno i campi
+        newsEsistente.setTitle(payload.title());
+        newsEsistente.setDescription(payload.description());
+        newsEsistente.setImageUrl(payload.imageUrl());
+        newsEsistente.setPublishedAt(payload.publishedAt());
+
+        // Salvo le modifiche
+        return newsRepository.save(newsEsistente);
+    }
 }

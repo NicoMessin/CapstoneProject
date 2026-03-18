@@ -1,8 +1,10 @@
 package niccolomessina.backend.controllers;
 
 
+import niccolomessina.backend.entities.News;
 import niccolomessina.backend.entities.Product;
 import niccolomessina.backend.entities.Utente;
+import niccolomessina.backend.payloads.NewsDTO;
 import niccolomessina.backend.payloads.ProductsDTO;
 import niccolomessina.backend.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -59,4 +61,11 @@ public class ProductsController {
         productService.deleteProduct(id);
     }
 
+    //UPDATE
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Product editProduct(@PathVariable UUID id, @RequestBody @Validated ProductsDTO payload) {
+        return productService.updateProduct(id, payload);
+    }
 }
