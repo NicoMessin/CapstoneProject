@@ -51,6 +51,9 @@ function Sidebar() {
           <Nav.Link as={Link} to="/shop" onClick={() => setOpen(false)}>
             SHOP
           </Nav.Link>
+          <Nav.Link as={Link} to="/calendario" onClick={() => setOpen(false)}>
+            CALENDARIO
+          </Nav.Link>
 
           {role === "ADMIN" && (
             <Nav.Link

@@ -76,6 +76,7 @@ return(
         <Nav.Link href="/adminNews">NEWS</Nav.Link>
         <Nav.Link href="/adminShop">SHOP</Nav.Link>
         <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
+         <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
       </Nav>
     </Navbar.Collapse>
   </Container>

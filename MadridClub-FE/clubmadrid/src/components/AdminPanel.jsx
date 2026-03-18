@@ -19,6 +19,8 @@ return(
             <Nav.Link href="/adminShop">SHOP</Nav.Link>
             <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
             
+            <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
+            
          
           </Nav>
         </Navbar.Collapse>

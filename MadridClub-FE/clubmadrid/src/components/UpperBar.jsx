@@ -37,6 +37,7 @@ function UpperBar() {
       <Nav.Link as={Link} to="/" className="mx-3">HOME</Nav.Link>
       <Nav.Link as={Link} to="/tickets" className="mx-3">TICKETS</Nav.Link>
       <Nav.Link as={Link} to="/shop" className="mx-3">SHOP</Nav.Link>
+      <Nav.Link as={Link} to="/calendario" className="mx-3">CALENDARIO</Nav.Link>
     {/* Link visibile solo agli admin */}
   {role === "ADMIN" && (
     <Nav.Link as={Link} to="/admin-panel" className="mx-3" >

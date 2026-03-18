@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-function AdminPanel(){
+function AdminNews(){
 
 const [news, setNews] = useState([])
 const [form, setForm] = useState({
@@ -66,7 +66,7 @@ return(
             <Nav.Link href="/adminNews">NEWS</Nav.Link>
             <Nav.Link href="/adminShop">SHOP</Nav.Link>
             <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
-            
+             <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -112,4 +112,4 @@ onChange={(e)=>setForm({...form,publishedAt:e.target.value})}
 )
 }
 
-export default AdminPanel
+export default AdminNews

@@ -96,3 +96,54 @@
   border-radius: 50%;
   padding: 2px 6px;
   font-size: 12px;}
+
+  .calendario {
+  width: 700px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Header mese e bottoni */
+.calendario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Griglia calendario */
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+/* Giorni della settimana */
+.calendario-grid .giorno-settimana {
+  font-weight: bold;
+  text-align: center;
+  
+}
+
+/* Celle giorno */
+.cella-giorno {
+  min-height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+  background: #f9f9f9;
+}
+
+/* Numero del giorno */
+.numero-giorno {
+  font-weight: bold;
+}
+
+/* Partita dentro cella */
+.partita {
+  font-size: 12px;
+  margin-top: 4px;
+  background: #e3f2fd;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
