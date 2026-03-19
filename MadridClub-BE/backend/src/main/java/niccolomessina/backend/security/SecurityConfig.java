@@ -29,9 +29,10 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.cors(cors -> {});
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers("/auth/**", "/news", "/tickets",  "/products", "/carrelloItemsShop", "/carrelloTickets", "/partite","/stripe/**").permitAll() // news pubbliche
+                .requestMatchers("/stripe/webhook").permitAll()
+                .requestMatchers("/auth/**", "/news", "/tickets", "/products", "/carrelloItemsShop", "/partite").permitAll()
+                .requestMatchers("/carrelloTickets/**", "/stripe/**").authenticated()
                 .anyRequest().authenticated()
-
         );
 
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

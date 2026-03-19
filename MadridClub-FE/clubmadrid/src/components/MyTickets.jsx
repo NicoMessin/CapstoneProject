@@ -5,13 +5,17 @@ function MyTickets() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-   fetch("http://localhost:3001/carrelloTickets/mieiTickets", {
-  headers: { Authorization: `Bearer ${token}` },
-})
-      .then(res => res.ok ? res.json() : Promise.reject("Errore fetching"))
-      .then(data => setMyTickets(data))
-      .catch(err => console.error(err));
-  }, []);
+ 
+
+  fetch("http://localhost:3001/carrelloTickets/mieiTickets", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => res.ok ? res.json() : Promise.reject("Errore fetching"))
+    .then(data => setMyTickets(data))
+    .catch(err => console.error(err));
+}, []);
 
   if (myTickets.length === 0) return <p>Non hai ancora biglietti.</p>;
 

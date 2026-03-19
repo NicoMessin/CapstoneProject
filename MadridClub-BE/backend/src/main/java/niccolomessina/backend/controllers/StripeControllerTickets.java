@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 
@@ -97,40 +99,53 @@ public class StripeControllerTickets {
     }
 
     /*** WEBHOOK STRIPE: CONFERMA ACQUISTO TICKET ***/
+
     @PostMapping("/webhook")
     public ResponseEntity<String> stripeWebhook(@RequestBody String payload,
                                                 @RequestHeader("Stripe-Signature") String sigHeader) {
-        System.out.println("🚀 Webhook ricevuto!");
-        System.out.println("Payload: " + payload);
-        System.out.println("Stripe-Signature: " + sigHeader);
-
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, stripeWebhookSecret);
-            System.out.println("Event type: " + event.getType());
+
+            System.out.println("Evento: " + event.getType());
 
             if ("checkout.session.completed".equals(event.getType())) {
-                // Deserializza session
-                Session session;
-                try {
-                    session = (Session) event.getDataObjectDeserializer().getObject().orElseThrow();
-                } catch (Exception e) {
-                    session = (Session) event.getDataObjectDeserializer()
-                            .getObject()
-                            .orElseThrow(() -> new IllegalArgumentException("Sessione non valida"));
+
+                // Recupero sessionId dal payload
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(payload);
+
+                String sessionId = root
+                        .path("data")
+                        .path("object")
+                        .path("id")
+                        .asText();
+
+                // Recupero session completa da Stripe
+                Session session = Session.retrieve(sessionId);
+
+                // Metadata
+                String userId = session.getMetadata().get("userId");
+
+                if (userId == null) {
+                    System.out.println("❌ Metadata mancante");
+                    return ResponseEntity.ok("No metadata");
                 }
 
-                // Recupera ID utente dai metadata
-                String userId = session.getMetadata().get("userId");
-                System.out.println("UserId dal webhook: " + userId);
-
                 Utente utente = utenteRepository.findById(UUID.fromString(userId))
-                        .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+                        .orElseThrow();
 
-                List<CarrelloTicket> carrello = carrelloTicketService.findUtenteCarrelloTickets(utente.getId());
-                System.out.println("Carrello trovato: " + carrello.size() + " ticket");
+                List<CarrelloTicket> tickets = carrelloTicketService.findAllByUtente(utente.getId());
 
-                carrelloTicketService.confermaAcquisto(carrello);
-                System.out.println("✅ Ticket confermati come acquistati");
+                System.out.println("TROVATI: " + tickets.size());
+
+                if (tickets.isEmpty()) {
+                    return ResponseEntity.ok("No tickets");
+                }
+
+                carrelloTicketService.confermaAcquisto(tickets);
+
+
+                System.out.println("✅ ACQUISTO COMPLETATO");
             }
 
             return ResponseEntity.ok("Received");
@@ -139,5 +154,4 @@ public class StripeControllerTickets {
             e.printStackTrace();
             return ResponseEntity.status(400).body("Webhook error: " + e.getMessage());
         }
-    }
-}
+    }}

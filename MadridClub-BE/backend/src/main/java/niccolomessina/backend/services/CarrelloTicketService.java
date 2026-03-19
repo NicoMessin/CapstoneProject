@@ -1,6 +1,5 @@
 package niccolomessina.backend.services;
 
-
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import niccolomessina.backend.entities.*;
@@ -10,78 +9,95 @@ import niccolomessina.backend.repositories.TicketRepository;
 import niccolomessina.backend.repositories.UtenteRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @Slf4j
 public class CarrelloTicketService {
+
     private final CarrelloTicketRepository carrelloTicketRepository;
     private final TicketRepository ticketRepository;
     private final UtenteRepository utenteRepository;
-    public CarrelloTicketService(CarrelloTicketRepository carrelloTicketRepository, TicketRepository ticketRepository,UtenteRepository utenteRepository){
-        this.carrelloTicketRepository= carrelloTicketRepository;
-        this.ticketRepository= ticketRepository;
-        this.utenteRepository= utenteRepository;}
 
-        //SAVE
-        public CarrelloTicket saveCarrelloTicket(CarrelloTicketsDTO payload, Utente utente) {
-            Ticket ticket = ticketRepository.findById(payload.ticketId())
-            .orElseThrow(() -> new IllegalArgumentException("Ticket non trovato"));
-
-            // CONTROLLO SE TICKET GIA' PRESO QUEL POSTO PRECISO
-            // Controllo se lo stesso posto è già stato preso
-            boolean postoGiaPrenotato = carrelloTicketRepository.existsByTicketIdAndEnumSettoreAndEnumFilaAndEnumPosto(
-                    ticket.getId(),
-                    payload.enumSettore(),
-                    payload.enumFila(),
-                    payload.enumPosto()
-            );
-
-            if (postoGiaPrenotato) {
-                throw new IllegalArgumentException("Biglietto già prenotato per questo posto");
-            }
-
-
-            // CALCOLO PREZZO IN BASE AL SETTORE
-            BigDecimal prezzo = ticket.getPrezzoBySettore(payload.enumSettore());
-
-            CarrelloTicket nuovoCarrelloTicket = new CarrelloTicket(payload.enumSettore(), payload.enumFila(), payload.enumPosto(), utente, ticket, payload.nome(),
-                    payload.cognome(),
-                    payload.dataNascita(), payload.acquistato());
-            return  carrelloTicketRepository.save(nuovoCarrelloTicket);
+    public CarrelloTicketService(CarrelloTicketRepository carrelloTicketRepository,
+                                 TicketRepository ticketRepository,
+                                 UtenteRepository utenteRepository) {
+        this.carrelloTicketRepository = carrelloTicketRepository;
+        this.ticketRepository = ticketRepository;
+        this.utenteRepository = utenteRepository;
     }
 
-    //FIND ALL PER MOSTRARE I TICKET DELL'UTENTE
-    public List<CarrelloTicket> findUtenteCarrelloTickets(UUID id){
+    // SAVE
+    public CarrelloTicket saveCarrelloTicket(CarrelloTicketsDTO payload, Utente utente) {
+
+        Ticket ticket = ticketRepository.findById(payload.ticketId())
+                .orElseThrow(() -> new IllegalArgumentException("Ticket non trovato"));
+
+        // controllo posto già acquistato
+        boolean postoGiaOccupato = carrelloTicketRepository
+                .existsByTicketIdAndEnumSettoreAndEnumFilaAndEnumPosto(
+                        ticket.getId(),
+                        payload.enumSettore(),
+                        payload.enumFila(),
+                        payload.enumPosto()
+                );
+        if (postoGiaOccupato) {
+            throw new IllegalArgumentException("Biglietto già prenotato per questo posto");
+        }
+
+        CarrelloTicket ct = new CarrelloTicket();
+
+        ct.setTicket(ticket);
+        ct.setUtente(utente);
+        ct.setEnumSettore(payload.enumSettore());
+        ct.setEnumFila(payload.enumFila());
+        ct.setEnumPosto(payload.enumPosto());
+
+        // FIX fondamentale
+        ct.setAcquistato(false);
+
+        ct.setNome(payload.nome());
+        ct.setCognome(payload.cognome());
+        ct.setDataNascita(payload.dataNascita());
+
+        return carrelloTicketRepository.save(ct);
+    }
+
+    // FIND CARRELLO UTENTE
+    public List<CarrelloTicket> findUtenteCarrelloTickets(UUID id) {
         return carrelloTicketRepository.findByUtenteIdOrderByIdAsc(id);
     }
 
-    //DELETE
-    public void  deleteCarrelloTicket(UUID id){ carrelloTicketRepository.deleteById(id);}
+    // DELETE SINGOLO
+    public void deleteCarrelloTicket(UUID id) {
+        carrelloTicketRepository.deleteById(id);
+    }
 
-    //PER AGGIORNARE
-   public CarrelloTicket aggiornaTicket(UUID id, EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto){
-        CarrelloTicket ticket= carrelloTicketRepository.findById(id)
+    // UPDATE POSTO
+    public CarrelloTicket aggiornaTicket(UUID id, EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto) {
+        CarrelloTicket ticket = carrelloTicketRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Item non trovato"));
+
         ticket.setEnumSettore(enumSettore);
         ticket.setEnumFila(enumFila);
         ticket.setEnumPosto(enumPosto);
+
         return carrelloTicketRepository.save(ticket);
-   }
-   //SVUOTA TUTTO IL CARRELLO
+    }
+
+    // SVUOTA CARRELLO
     @Transactional
-    public void  svuotaCarrello(Utente utente){
+    public void svuotaCarrello(Utente utente) {
         carrelloTicketRepository.deleteAllByUtenteId(utente.getId());
     }
 
-
-    //POSTI OCCUPATI
-    public List<CarrelloTicket> findPostiOccupati(UUID ticketId){
-        return carrelloTicketRepository.findByTicketId(ticketId);
+    // POSTI OCCUPATI (solo acquistati)
+    public List<CarrelloTicket> findPostiOccupati(UUID ticketId) {
+        return carrelloTicketRepository.findByTicketIdAndAcquistatoTrue(ticketId);
     }
 
+    // AGGIORNA INFO UTENTE
     public CarrelloTicket aggiornaInfo(UUID id, CarrelloTicketsDTO dto) {
         CarrelloTicket ticket = carrelloTicketRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Item non trovato"));
@@ -93,25 +109,26 @@ public class CarrelloTicketService {
         return carrelloTicketRepository.save(ticket);
     }
 
-    //PROVA
+    // CONFERMA ACQUISTO
     @Transactional
     public List<CarrelloTicket> confermaAcquisto(List<CarrelloTicket> carrello) {
-        for (CarrelloTicket ticket : carrello) {
-            ticket.setAcquistato(true);  // aggiungi il campo booleano acquistato in CarrelloTicket
-            carrelloTicketRepository.save(ticket);
-        }
-        return carrello;
+        return carrello.stream().map(ticket -> {
+            ticket.setAcquistato(true);
+            return carrelloTicketRepository.save(ticket);
+        }).toList();
     }
 
-    //FIND ALL PER MOSTRARE I TICKET ACQUISTATI DELL'UTENTE
-
-    public List<CarrelloTicket> findAcquistatiUtente(UUID utenteId) {
-        return carrelloTicketRepository.findByUtenteIdOrderByIdAsc(utenteId)
-                .stream()
-                .filter(CarrelloTicket::getAcquistato) // prendi solo quelli acquistati
-                .toList();
+    // TICKET ACQUISTATI UTENTE
+    public List<CarrelloTicket> findAcquistatiUtente(UUID userId) {
+        return carrelloTicketRepository.findByUtente_IdAndAcquistatoTrue(userId);
     }
 
+    // TUTTI I TICKET UTENTE
+    public List<CarrelloTicket> findAllByUtente(UUID userId) {
+        return carrelloTicketRepository.findByUtenteId(userId);
+    }
 
-
+    public List<CarrelloTicket> findPostiOccupatiDettaglio(UUID ticketId) {
+        return carrelloTicketRepository.findByTicketIdAndAcquistatoTrue(ticketId);
+    }
 }

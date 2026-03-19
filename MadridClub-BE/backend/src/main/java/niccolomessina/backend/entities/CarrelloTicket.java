@@ -11,7 +11,11 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name= "Carrello_tickets")
+@Table(name= "Carrello_tickets", uniqueConstraints = @UniqueConstraint(
+        columnNames = {"ticket_id", "enumSettore", "enumFila", "enumPosto"}
+)
+)
+
 @Getter
 @Setter
 @ToString
@@ -38,7 +42,8 @@ public class CarrelloTicket {
     private String nome;
     private String cognome;
     private LocalDate dataNascita;
-    private Boolean acquistato;
+    @Column(nullable = false)
+    private Boolean acquistato = false;
 
     public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket,String nome, String cognome, LocalDate dataNascita, Boolean acquistato){
         this.enumSettore= enumSettore;

@@ -15,8 +15,14 @@ public interface CarrelloTicketRepository extends JpaRepository<CarrelloTicket, 
     void deleteAllByUtenteId(UUID id);
     List<CarrelloTicket> findByTicketId(UUID ticketId);
 
+    List<CarrelloTicket> findByUtenteId(UUID utenteId);
+    List<CarrelloTicket> findByUtente_IdAndAcquistatoTrue(UUID userId);
+
+    List<CarrelloTicket> findByTicketIdAndAcquistatoTrue(UUID ticketId);
+
     boolean existsByTicketIdAndEnumSettoreAndEnumFilaAndEnumPosto(
             UUID ticketId, EnumSettore settore, EnumFila fila, EnumPosto posto
+
     );
 
 

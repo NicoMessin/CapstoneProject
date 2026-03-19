@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 function Tickets() {
   const [ticket, setTicket] = useState([]);
   const [cartCount, setCartCount] = useState(0);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  
 
   // fetch tickets
   useEffect(() => {
@@ -15,26 +13,23 @@ function Tickets() {
       .then((res) =>
         res.ok ? res.json() : Promise.reject("Errore nel recupero del ticket")
       )
-      .then((data) => {
-        setTicket(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Errore fetching ticket:", err);
-        setLoading(false);
-      });
+      .then((data) => setTicket(data))
+      .catch((err) => console.error("Errore fetching ticket:", err));
   }, []);
 
-  // fetch carrello per contatore
+  // fetch carrello count
   const fetchCartCount = () => {
     const token = localStorage.getItem("token");
+
     fetch("http://localhost:3001/carrelloTickets/mio", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => (res.ok ? res.json() : Promise.reject("Errore fetching carrello")))
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject("Errore fetching carrello")
+      )
       .then((data) => {
-        const totalCount = data.reduce((sum) => sum + 1, 0);
-        setCartCount(totalCount);
+        const soloCarrello = data.filter(item => item.acquistato !== true);
+        setCartCount(soloCarrello.length);
       })
       .catch((err) => console.error(err));
   };
@@ -43,86 +38,94 @@ function Tickets() {
     fetchCartCount();
   }, []);
 
-  // aggiungi al carrello
+  // acquisto
   const handleCompra = (item) => {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  // Se non sei loggato, reindirizza al login
-  if (!token) {
-     alert("Per acquistare un biglietto è necessario fare prima il login.");
-    navigate("/auth/Login");
-    return;
-  }
+    if (!token) {
+      alert("Login richiesto");
+      navigate("/auth/Login");
+      return;
+    }
 
-  // Fetch del carrello aggiornato
-  fetch("http://localhost:3001/carrelloTickets/mio", {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("Errore fetching carrello");
-      return res.json();
+    fetch("http://localhost:3001/carrelloTickets/mio", {
+      headers: { Authorization: `Bearer ${token}` },
     })
-    .then((carrello) => {
-      const bigliettiMioTicket = carrello.filter(i => i.ticket.id === item.id).length;
+      .then(res => {
+        if (!res.ok) throw new Error("Errore fetching carrello");
+        return res.json();
+      })
+      .then(carrello => {
 
-      if (bigliettiMioTicket >= 5) {
-        alert("Non puoi acquistare più di 5 biglietti per la stessa partita con lo stesso account.");
-        throw new Error("Limite biglietti superato");
-      }
+        // ✅ conteggio totale (carrello + acquistati)
+        const count = carrello.filter(
+          i => i.ticket.id === item.id
+        ).length;
 
-      return fetch(`http://localhost:3001/carrelloTickets/postiDisponibili/${item.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    })
-    .then((res) => {
-      if (!res.ok) throw new Error("Errore fetching posti disponibili");
-      return res.json();
-    })
-    .then((posti) => {
-      const filaDisponibile = Object.keys(posti).find(f => posti[f]?.length > 0);
-      if (!filaDisponibile) {
-        alert("Non ci sono più posti disponibili per questo ticket!");
-        throw new Error("Posti esauriti");
-      }
+        if (count >= 5) {
+          alert("Non puoi avere più di 5 biglietti per questa partita.");
+          throw new Error("Limite raggiunto");
+        }
 
-      const posto = posti[filaDisponibile][0];
+        return fetch(`http://localhost:3001/carrelloTickets/postiDisponibili/${item.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Errore posti disponibili");
+        return res.json();
+      })
+      .then(posti => {
 
-      return fetch("http://localhost:3001/carrelloTickets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          enumSettore: "FONDO_SUR",
-          enumFila: filaDisponibile,
-          enumPosto: posto,
-          ticketId: item.id,
-          nome: "", // placeholder
-          cognome: "", // placeholder
-          dataNascita: "2000-01-01", // placeholder
-        }),
-      });
-    })
-    .then((res) => {
-      if (!res.ok) throw new Error("Errore aggiunta al carrello");
-      return res.json();
-    })
-    .then(() => fetchCartCount())
-    .catch((err) => console.error(err));
-};
-         
-  if (loading) return <p>Caricamento in corso...</p>;
-  if (!loading && ticket.length === 0) return <p>Impossibile caricare i tickets.</p>;
+        const file = Object.keys(posti);
+        if (file.length === 0) throw new Error("Nessuna fila disponibile");
+
+        const filaRandom = file[Math.floor(Math.random() * file.length)];
+        const postiFila = posti[filaRandom];
+
+        if (!postiFila || postiFila.length === 0) {
+          throw new Error("Nessun posto disponibile");
+        }
+
+        const postoRandom = postiFila[Math.floor(Math.random() * postiFila.length)];
+
+        return fetch("http://localhost:3001/carrelloTickets", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ticketId: item.id,
+            enumSettore: "FONDO_SUR",
+            enumFila: filaRandom,
+            enumPosto: postoRandom,
+            nome: "",
+            cognome: "",
+            dataNascita: "2000-01-01",
+          }),
+        });
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Errore aggiunta al carrello");
+        return res.json();
+      })
+      .then(() => fetchCartCount())
+      .catch(err => console.error(err));
+  };
+
+  if (ticket.length === 0) return <p>Nessun ticket disponibile.</p>;
 
   return (
     <Container fluid className="sfondoTickets">
       <Row className="d-flex align-items-center bg-dark">
         <Col xs={2}></Col>
-        <Col xs={8} className="">
-          <h1 className="d-flex justify-content-center mt-2 text-white">BIGLIETTI</h1>
+        <Col xs={8}>
+          <h1 className="d-flex justify-content-center mt-2 text-white">
+            BIGLIETTI
+          </h1>
         </Col>
-        <Col xs={2} className="text-end ">
+        <Col xs={2} className="text-end">
           <i className="bi bi-search mx-2 fs-5 text-white"></i>
           <span className="position-relative">
             <i
@@ -142,7 +145,10 @@ function Tickets() {
               <p className="card-text">{item.date}</p>
               <p className="card-text">{item.opponents}</p>
               <p className="card-text">{item.stadium}</p>
-              <button className="btn btn-primary" onClick={() => handleCompra(item)}>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleCompra(item)}
+              >
                 Acquista
               </button>
             </div>
