@@ -26,8 +26,9 @@ function MyTickets() {
         {myTickets.map(ticket => (
           <div key={ticket.id} className="col-md-4 mb-3">
             <div className="card p-3">
-              <h5>{ticket.day} - {ticket.date}</h5>
-              <p>{ticket.opponents} @ {ticket.stadium}</p>
+              <h5>{ticket.ticket.day} - {ticket.ticket.date}</h5>
+              <p>{ticket.ticket.opponents}  {ticket.stadium}</p>
+              <p>{ticket.nome}  {ticket.cognome}   {ticket.dataNascita}</p>
               <p>Settore: {ticket.enumSettore}, Fila: {ticket.enumFila}, Posto: {ticket.enumPosto}</p>
             </div>
           </div>

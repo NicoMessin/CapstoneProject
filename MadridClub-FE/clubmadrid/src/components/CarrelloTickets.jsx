@@ -236,6 +236,7 @@ function CarrelloTickets() {
                     onChange={(e) =>
                       aggiornaItem(item.id, item.enumSettore, item.enumFila, e.target.value)
                     }
+                    
                   >
                     {"ABCDEFGHIJKLMNOPQR".split("").map((posto) => {
 
@@ -279,6 +280,45 @@ function CarrelloTickets() {
                 </div>
 
               </div>
+              <div className="row g-3 mt-2">
+
+  <div className="col-md-4">
+    <label className="form-label">Nome</label>
+    <input
+      type="text"
+      className="form-control"
+      value={item.nome || ""}
+      onChange={(e) =>
+        aggiornaInfo(item.id, { nome: e.target.value })
+      }
+    />
+  </div>
+
+  <div className="col-md-4">
+    <label className="form-label">Cognome</label>
+    <input
+      type="text"
+      className="form-control"
+      value={item.cognome || ""}
+      onChange={(e) =>
+        aggiornaInfo(item.id, { cognome: e.target.value })
+      }
+    />
+  </div>
+
+  <div className="col-md-4">
+    <label className="form-label">Data di nascita</label>
+    <input
+      type="date"
+      className="form-control"
+      value={item.dataNascita || ""}
+      onChange={(e) =>
+        aggiornaInfo(item.id, { dataNascita: e.target.value })
+      }
+    />
+  </div>
+
+</div>
 
               <div className="mt-3 d-flex justify-content-between align-items-center">
                 <strong>Totale: €{prezzo}</strong>

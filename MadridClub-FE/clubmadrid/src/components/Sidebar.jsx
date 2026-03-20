@@ -29,7 +29,7 @@ function Sidebar() {
       )}
 
       {/* Overlay + sidebar */}
-      <div className={`sidebar-overlay ${open ? "open" : ""}`}>
+      <div className={`sidebar-overlay ${open ? "open" : ""}` }>
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center p-3 w-100">
           <button className="close-btn" onClick={() => setOpen(false)}>
@@ -40,24 +40,24 @@ function Sidebar() {
 
         {/* Links allineati a sinistra */}
         <Nav className="flex-column ps-3 mt-4">
-          <Nav.Link as={Link} to="/" onClick={() => setOpen(false)}>
+          <Nav.Link  className="text-white" as={Link} to="/" onClick={() => setOpen(false)}>
             HOME
           </Nav.Link>
 
-          <Nav.Link as={Link} to="/tickets " onClick={() => setOpen(false)}>
+          <Nav.Link as={Link} className="text-white" to="/tickets " onClick={() => setOpen(false)}>
             TICKETS
           </Nav.Link>
 
-          <Nav.Link as={Link} to="/shop" onClick={() => setOpen(false)}>
+          <Nav.Link as={Link} className="text-white" to="/shop" onClick={() => setOpen(false)}>
             SHOP
           </Nav.Link>
-          <Nav.Link as={Link} to="/calendario" onClick={() => setOpen(false)}>
+          <Nav.Link as={Link} className="text-white" to="/calendario" onClick={() => setOpen(false)}>
             CALENDARIO
           </Nav.Link>
 
           {role === "ADMIN" && (
             <Nav.Link
-              as={Link}
+              as={Link} className="text-white"
               to="/admin-panel"
               onClick={() => setOpen(false)}
             >

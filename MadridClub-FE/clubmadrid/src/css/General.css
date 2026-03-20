@@ -42,8 +42,9 @@
 
 .sidebar-overlay.open {
   width: 100%;
-  background-color: orange;
+  background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
 }
+
 
 .close-btn {
   position: absolute;

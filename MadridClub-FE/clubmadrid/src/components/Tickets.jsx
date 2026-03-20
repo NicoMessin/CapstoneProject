@@ -43,7 +43,7 @@ function Tickets() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Login richiesto");
+      alert("Per acqiistare un ticket è necessario effettuare il login");
       navigate("/auth/Login");
       return;
     }
@@ -57,7 +57,7 @@ function Tickets() {
       })
       .then(carrello => {
 
-        // ✅ conteggio totale (carrello + acquistati)
+        // conteggio totale (carrello + acquistati)
         const count = carrello.filter(
           i => i.ticket.id === item.id
         ).length;
