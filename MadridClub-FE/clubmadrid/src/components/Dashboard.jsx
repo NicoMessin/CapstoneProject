@@ -2,53 +2,97 @@ import { useEffect, useState } from "react";
 import AdminDashboard from "./AdminDashboard";
 import UserDashboard from "./UserDashboard";
 
- function Dashboard() {
-  const [role, setRole] = useState("NON_LOGGATO"); 
-  
+function Dashboard() {
+  const [role, setRole] = useState("NON_LOGGATO");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-  const checkUser = () => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       setRole("NON_LOGGATO");
-     
       return;
     }
 
     fetch("http://localhost:3001/auth/me", {
-      headers: { "Authorization": "Bearer " + token }
+      headers: { Authorization: "Bearer " + token },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setRole(data.tipoUtente || "NON_LOGGATO");
-       
+        setUser(data); // salvo tutto l'utente
       })
       .catch(() => {
         setRole("NON_LOGGATO");
-       
       });
-  };
-
-  checkUser();
-}, []);
-
+  }, []);
 
   return (
-  <div>
-  <h1>Benvenuto sulla pagina pubblica!</h1>
+    <div className="page">
+      {/* NAVBAR */}
+      <div className="navbar">
+        <h2 className="logo">MyProfile</h2>
 
-  {/* Controllo login */}
-  {role === "USER" ? (
-    <UserDashboard />
-  ) : role === "ADMIN" ? (
-    <AdminDashboard />
-  ) : (
-    <p>Non sei loggato.</p>
-  )}
+        <div>
+          {role !== "NON_LOGGATO" ? (
+            <button
+              className="logoutBtn"
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+            >
+              Logout
+            </button>
+          ) : (
+            <span className="badge">Guest</span>
+          )}
+        </div>
+      </div>
 
-  {/* Contenuto pubblico */}
-  <p>Contenuto pubblico visibile a tutti.</p>
-  </div>
-);
-  
-} export default Dashboard
+      {/* CONTENT */}
+      <div className="containerDash">
+        <div className="cardDash">
+          {/* INFO UTENTE */}
+          {user && (
+            <div className="userInfo">
+              <p>
+                <strong>Nome:</strong> {user.nome}
+              </p>
+              <p>
+                 <strong>Cognome:</strong> {user.cognome}
+
+              </p>
+              <p>
+                <strong>Email:</strong> {user.email}
+              </p>
+              <hr />
+            </div>
+          )}
+
+          <h1>Dashboard</h1>
+
+          {role === "USER" && (
+            <>
+              <p className="subtitle">Benvenuto utente 👋</p>
+              <UserDashboard />
+            </>
+          )}
+
+          {role === "ADMIN" && (
+            <>
+              <p className="subtitle">Pannello amministratore ⚙️</p>
+              <AdminDashboard />
+            </>
+          )}
+
+          {role === "NON_LOGGATO" && (
+            <p className="warning">Devi effettuare il login</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Dashboard;

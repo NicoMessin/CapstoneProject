@@ -39,11 +39,7 @@ function UpperBar() {
       <Nav.Link as={Link} to="/shop" className="mx-3">SHOP</Nav.Link>
       <Nav.Link as={Link} to="/calendario" className="mx-3">CALENDARIO</Nav.Link>
     {/* Link visibile solo agli admin */}
-  {role === "ADMIN" && (
-    <Nav.Link as={Link} to="/admin-panel" className="mx-3" >
-      ADMIN PANEL
-    </Nav.Link>
-  )}
+ 
   </div>
   </Col>
 
@@ -72,6 +68,10 @@ function UpperBar() {
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
         <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
         <Dropdown.Item href="/myTickets">My Tickets</Dropdown.Item>
+          {role === "ADMIN" && (
+    <Dropdown.Item  href="/admin-panel" >Admin Panel
+    </Dropdown.Item>
+  )}
       </Dropdown.Menu>
     </Dropdown>
     {/* Desktop */}
@@ -88,10 +88,17 @@ function UpperBar() {
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
         <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
         <Dropdown.Item href="/myTickets">My Tickets</Dropdown.Item>
+         {role === "ADMIN" && (
+    <Dropdown.Item  href="/admin-panel" >Admin Panel
+    </Dropdown.Item>
+  )}
         
       </Dropdown.Menu>
     </Dropdown>
+       <Nav.Link as={Link} to="/settings"  >
       <i className="bi bi-gear text-black settings-btn fs-3  mx-3"></i>
+      
+    </Nav.Link>
     </div>
 
  

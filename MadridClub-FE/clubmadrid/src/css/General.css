@@ -66,7 +66,7 @@
    font-size: 1.5rem;
 }
 
-.card-body {height: 308px;}
+
 
 .card-bodyTicketShop {height: auto;}
 .card-bodyProductShop {height: auto;}
@@ -76,6 +76,8 @@
   height: 400px;
   object-fit: cover;
 }
+
+
 
 .sfondoTickets{ background-image: url("/images/Estadio_.jpg");
   background-size: cover;
@@ -88,7 +90,7 @@
   border-radius: 2rem;
 }
 
-.cardHomeImage{height: 350px;}
+.cardHomeImage{height: 366px;}
 .cartCount{position: absolute;
   top: -8px;
   right: -8px;
@@ -147,4 +149,77 @@
   background: #e3f2fd;
   padding: 2px 4px;
   border-radius: 4px;
+}
+
+/* DASHBOARD */
+.page {
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+
+.navbar {
+  height: 60px;
+  background: #111827;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  margin: 0;
+}
+
+.badge {
+  background: #374151;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.logoutBtn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.containerDash {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.cardDash {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.warning {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+/* TICKETS */
+
+.ticket-card {
+  background-color: rgba(var(--bs-dark-rgb)) !important; 
+  color: white;
+  border-radius: 20px;
+  padding: 20px;
+  min-height: 220px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }

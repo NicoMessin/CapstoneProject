@@ -131,4 +131,6 @@ public class CarrelloTicketService {
     public List<CarrelloTicket> findPostiOccupatiDettaglio(UUID ticketId) {
         return carrelloTicketRepository.findByTicketIdAndAcquistatoTrue(ticketId);
     }
+
+
 }

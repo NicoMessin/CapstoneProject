@@ -20,6 +20,7 @@ import Success from "./components/succes";
 import MyTickets from "./components/MyTickets";
 import Calendario from "./components/Calendario";
 import AdminPartite from "./components/AdminPartite";
+import Settings from "./components/Settings";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
 
       {/* PAGINE */}
       <Routes>
+        <Route path="/settings" element={< Settings/>} />
         <Route path="/adminPartite" element={< AdminPartite/>} />
         <Route path="/calendario" element={< Calendario/>} />
         <Route path="/myTickets" element={< MyTickets/>} />

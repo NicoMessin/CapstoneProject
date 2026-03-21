@@ -11,7 +11,7 @@ function Tickets() {
   useEffect(() => {
     fetch("http://localhost:3001/tickets")
       .then((res) =>
-        res.ok ? res.json() : Promise.reject("Errore nel recupero del ticket")
+        res.ok ? res.json() : Promise.reject("Errore nel recupero del ticket"),
       )
       .then((data) => setTicket(data))
       .catch((err) => console.error("Errore fetching ticket:", err));
@@ -25,10 +25,10 @@ function Tickets() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) =>
-        res.ok ? res.json() : Promise.reject("Errore fetching carrello")
+        res.ok ? res.json() : Promise.reject("Errore fetching carrello"),
       )
       .then((data) => {
-        const soloCarrello = data.filter(item => item.acquistato !== true);
+        const soloCarrello = data.filter((item) => item.acquistato !== true);
         setCartCount(soloCarrello.length);
       })
       .catch((err) => console.error(err));
@@ -51,32 +51,31 @@ function Tickets() {
     fetch("http://localhost:3001/carrelloTickets/mio", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Errore fetching carrello");
         return res.json();
       })
-      .then(carrello => {
-
+      .then((carrello) => {
         // conteggio totale (carrello + acquistati)
-        const count = carrello.filter(
-          i => i.ticket.id === item.id
-        ).length;
+        const count = carrello.filter((i) => i.ticket.id === item.id).length;
 
         if (count >= 5) {
           alert("Non puoi avere più di 5 biglietti per questa partita.");
           throw new Error("Limite raggiunto");
         }
 
-        return fetch(`http://localhost:3001/carrelloTickets/postiDisponibili/${item.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        return fetch(
+          `http://localhost:3001/carrelloTickets/postiDisponibili/${item.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
       })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Errore posti disponibili");
         return res.json();
       })
-      .then(posti => {
-
+      .then((posti) => {
         const file = Object.keys(posti);
         if (file.length === 0) throw new Error("Nessuna fila disponibile");
 
@@ -87,7 +86,8 @@ function Tickets() {
           throw new Error("Nessun posto disponibile");
         }
 
-        const postoRandom = postiFila[Math.floor(Math.random() * postiFila.length)];
+        const postoRandom =
+          postiFila[Math.floor(Math.random() * postiFila.length)];
 
         return fetch("http://localhost:3001/carrelloTickets", {
           method: "POST",
@@ -106,19 +106,19 @@ function Tickets() {
           }),
         });
       })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Errore aggiunta al carrello");
         return res.json();
       })
       .then(() => fetchCartCount())
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   if (ticket.length === 0) return <p>Nessun ticket disponibile.</p>;
 
   return (
     <Container fluid className="sfondoTickets">
-      <Row className="d-flex align-items-center bg-dark">
+      <Row className="d-flex align-items-center bg-dark py-2">
         <Col xs={2}></Col>
         <Col xs={8}>
           <h1 className="d-flex justify-content-center mt-2 text-white">
@@ -137,16 +137,27 @@ function Tickets() {
         </Col>
       </Row>
 
-      <Row>
+      <Row className="p-4">
         {ticket.map((item) => (
           <Col key={item.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-            <div className="card-body bg-secondary rounded-4 d-flex flex-column justify-content-center align-items-center mt-5">
-              <h5 className="card-title">{item.day}</h5>
-              <p className="card-text">{item.date}</p>
-              <p className="card-text">{item.opponents}</p>
-              <p className="card-text">{item.stadium}</p>
+            <div className="ticket-card h-100 d-flex flex-column justify-content-between">
+              <div>
+                <h5 className="ticket-title">{item.day}</h5>
+                <p className="ticket-text">
+                  {new Date(item.date).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <p className="ticket-text">{item.opponents}</p>
+                <p className="ticket-text">{item.stadium}</p>
+              </div>
+
               <button
-                className="btn btn-primary"
+                className="btn btn-primary w-100 mt-3"
                 onClick={() => handleCompra(item)}
               >
                 Acquista

@@ -52,14 +52,29 @@ public class AuthController {
         }
     }
     @GetMapping("/me")
-    public Map<String, String> getCurrentUser(Authentication authentication) {
+    public UtentiDTO getCurrentUser(Authentication authentication) {
+
         if (authentication == null || !authentication.isAuthenticated()) {
-            return Map.of("tipoUtente", "NON_LOGGATO");
+            return new UtentiDTO(
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "NON_LOGGATO"
+            );
         }
 
-        // Cast del principal a Utente
         Utente utente = (Utente) authentication.getPrincipal();
-        return Map.of("tipoUtente", utente.getTipoUtente().getTipoUtente().name());
+
+        return new UtentiDTO(
+                utente.getUsername(),
+                utente.getEmail(),
+                null,
+                utente.getNome(),
+                utente.getCognome(),
+                utente.getTipoUtente().getTipoUtente().name()
+        );
     }
 
 

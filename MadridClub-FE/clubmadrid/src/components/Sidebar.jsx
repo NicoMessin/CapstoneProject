@@ -55,15 +55,7 @@ function Sidebar() {
             CALENDARIO
           </Nav.Link>
 
-          {role === "ADMIN" && (
-            <Nav.Link
-              as={Link} className="text-white"
-              to="/admin-panel"
-              onClick={() => setOpen(false)}
-            >
-              ADMIN PANEL
-            </Nav.Link>
-          )}
+          
         </Nav>
       </div>
     </div>

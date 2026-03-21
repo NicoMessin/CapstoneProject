@@ -98,4 +98,6 @@ public class CarrelloTicketsController {
     public List<CarrelloTicket> postiOccupatiDettaglio(@PathVariable UUID ticketId){
         return carrelloTicketService.findPostiOccupatiDettaglio(ticketId);
     }
+
+
 }

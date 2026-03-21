@@ -78,7 +78,7 @@ function Home() {
               {news.slice(8, 10).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className=" rounded-4 cardHomeImage">
+                    <Card style={{ width: "18rem" ,}} className=" rounded-4 cardHomeImage">
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -86,7 +86,7 @@ function Home() {
                       />
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
-                        <Card.Text>{item.description}</Card.Text>
+                        <Card.Text >{item.description}</Card.Text>
                       </Card.Body>
                     </Card>
                   </div>

@@ -5,17 +5,20 @@ import com.stripe.model.checkout.Session;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import niccolomessina.backend.entities.CarrelloTicket;
 import niccolomessina.backend.entities.Utente;
 import niccolomessina.backend.repositories.UtenteRepository;
 import niccolomessina.backend.services.CarrelloTicketService;
+import niccolomessina.backend.services.EmailService;
 import niccolomessina.backend.security.JWTTools;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 
@@ -38,6 +41,9 @@ public class StripeControllerTickets {
     @Autowired
     private JWTTools jwtTools;
 
+    @Autowired
+    private EmailService emailService;
+
     /*** CREAZIONE CHECKOUT SESSION ***/
     @PostMapping("/checkout-tickets")
     public Map<String, String> checkoutTickets(
@@ -48,15 +54,14 @@ public class StripeControllerTickets {
             throw new IllegalArgumentException("Utente non autenticato");
         }
 
-        // Estrazione token JWT
-        String token = authHeader.substring(7); // rimuove "Bearer "
+        String token = authHeader.substring(7);
         UUID userId = jwtTools.getId(token);
 
-        // Recupero utente
         Utente utente = utenteRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
 
         Stripe.apiKey = stripeSecretKey;
+
         List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
 
         for (Map<String, Object> item : items) {
@@ -87,7 +92,7 @@ public class StripeControllerTickets {
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("http://localhost:5173/success?type=tickets")
                 .setCancelUrl("http://localhost:5173/carrelloTickets")
-                .putMetadata("userId", utente.getId().toString()) // fondamentale per il webhook
+                .putMetadata("userId", utente.getId().toString())
                 .addAllLineItem(lineItems)
                 .build();
 
@@ -98,19 +103,17 @@ public class StripeControllerTickets {
         return response;
     }
 
-    /*** WEBHOOK STRIPE: CONFERMA ACQUISTO TICKET ***/
-
+    /*** WEBHOOK STRIPE ***/
     @PostMapping("/webhook")
     public ResponseEntity<String> stripeWebhook(@RequestBody String payload,
                                                 @RequestHeader("Stripe-Signature") String sigHeader) {
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, stripeWebhookSecret);
 
-            System.out.println("Evento: " + event.getType());
+            System.out.println("EVENTO STRIPE: " + event.getType());
 
             if ("checkout.session.completed".equals(event.getType())) {
 
-                // Recupero sessionId dal payload
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode root = mapper.readTree(payload);
 
@@ -120,10 +123,8 @@ public class StripeControllerTickets {
                         .path("id")
                         .asText();
 
-                // Recupero session completa da Stripe
                 Session session = Session.retrieve(sessionId);
 
-                // Metadata
                 String userId = session.getMetadata().get("userId");
 
                 if (userId == null) {
@@ -142,10 +143,18 @@ public class StripeControllerTickets {
                     return ResponseEntity.ok("No tickets");
                 }
 
+                // Conferma acquisto
                 carrelloTicketService.confermaAcquisto(tickets);
 
+                // 👉 INVIO EMAIL
+                emailService.sendEmail(
+                        utente.getEmail(),
+                        "Conferma acquisto biglietti",
+                        "Acquisto completato! Grazie per il tuo ordine."
+                );
 
-                System.out.println("✅ ACQUISTO COMPLETATO");
+                System.out.println("EMAIL CHIAMATA");
+                System.out.println("✅ ACQUISTO COMPLETATO + EMAIL INVIATA");
             }
 
             return ResponseEntity.ok("Received");
@@ -154,4 +163,5 @@ public class StripeControllerTickets {
             e.printStackTrace();
             return ResponseEntity.status(400).body("Webhook error: " + e.getMessage());
         }
-    }}
+    }
+}
