@@ -9,26 +9,23 @@ function AdminPanel(){
 return(
 <>
 
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/adminNews">NEWS</Nav.Link>
-            <Nav.Link href="/adminShop">SHOP</Nav.Link>
-            <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
-            
-            <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
-            
-         
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
+        <Container>
+          <Navbar.Brand href="#home">Admin Panel</Navbar.Brand>
+          <Navbar.Toggle />
+          <Navbar.Collapse>
+            <Nav className="me-auto">
+              <Nav.Link href="/adminNews">News</Nav.Link>
+              <Nav.Link href="/adminShop">Shop</Nav.Link>
+              <Nav.Link href="/adminTickets">Tickets</Nav.Link>
+              <Nav.Link href="/adminPartite">Partite</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
 
-    <h1>ADMIN PANEL</h1>
+    <h1 className='ms-3'>ADMIN PANEL</h1>
   
 
 

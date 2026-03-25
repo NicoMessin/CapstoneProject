@@ -108,12 +108,12 @@ function Shop() {
             <Card style={{ width: "18rem" }}>
               <Card.Img variant="top" src={item.imageUrl} />
 
-              <Card.Body>
+              <Card.Body className="d-flex flex-column">
                 <Card.Title>{item.name_product}</Card.Title>
                 <Card.Text>{item.description}</Card.Text>
                 <Card.Text>€{item.price}</Card.Text>
 
-                <Button variant="primary" onClick={() => handleCompra(item)}>
+                <Button variant="primary" onClick={() => handleCompra(item)} className="mt-auto ">
                   COMPRA
                 </Button>
               </Card.Body>

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react"
-import Container from 'react-bootstrap/Container'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import { useEffect, useState } from "react";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { Card, Form, Row, Col, Button } from "react-bootstrap";
+
 
 function AdminTickets(){
 
@@ -76,87 +78,164 @@ const deleteTicket = (id) => {
     setEditingId(n.id);
   }
 
-return(
-<>
+return (
+  <>
+    <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
+      <Container>
+        <Navbar.Brand>Admin Panel</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Nav className="me-auto">
+            <Nav.Link href="/adminNews">News</Nav.Link>
+            <Nav.Link href="/adminShop">Shop</Nav.Link>
+            <Nav.Link href="/adminTickets">Tickets</Nav.Link>
+            <Nav.Link href="/adminPartite">Partite</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
 
-<Navbar expand="lg" className="bg-body-tertiary">
-  <Container>
-    <Navbar.Brand>Admin Panel</Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="me-auto">
-        <Nav.Link href="/adminNews">NEWS</Nav.Link>
-        <Nav.Link href="/adminShop">SHOP</Nav.Link>
-        <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
-         <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+    <Container>
+      {/* FORM */}
+      <Card className="mb-4 shadow">
+        <Card.Body>
+          <Card.Title>
+            {editingId ? "Modifica Ticket" : "Aggiungi Ticket"}
+          </Card.Title>
 
-<div>
+          <Form onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  placeholder="Giornata"
+                  value={form.day}
+                  onChange={(e) =>
+                    setForm({ ...form, day: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<h2>Aggiungi Ticket</h2>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  type="datetime-local"
+                  value={form.date}
+                  onChange={(e) =>
+                    setForm({ ...form, date: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<form onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  placeholder="Avversari"
+                  value={form.opponents}
+                  onChange={(e) =>
+                    setForm({ ...form, opponents: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<input
-placeholder="Giorno"
-value={form.day}
-onChange={(e)=>setForm({...form, day:e.target.value})}
-/>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  placeholder="Stadio"
+                  value={form.stadium}
+                  onChange={(e) =>
+                    setForm({ ...form, stadium: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<input
-type="datetime-local"
-value={form.date}
-onChange={(e)=>setForm({...form, date:e.target.value})}
-/>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  type="number"
+                  step="0.01"
+                  placeholder="Prezzo"
+                  value={form.price}
+                  onChange={(e) =>
+                    setForm({ ...form, price: Number(e.target.value) })
+                  }
+                />
+              </Col>
+            </Row>
 
-<input
-placeholder="Avversario"
-value={form.opponents}
-onChange={(e)=>setForm({...form, opponents:e.target.value})}
-/>
+            <div className="d-flex gap-2">
+              <Button type="submit" variant="primary">
+                {editingId ? "Salva" : "Aggiungi"}
+              </Button>
 
-<input
-placeholder="Stadio"
-value={form.stadium}
-onChange={(e)=>setForm({...form, stadium:e.target.value})}
-/>
+              {editingId && (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setForm({
+                      day: "",
+                      date: "",
+                      opponents: "",
+                      stadium: "",
+                      price: "",
+                    });
+                    setEditingId(null);
+                  }}
+                >
+                  Annulla
+                </Button>
+              )}
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
 
-<input
-type="number"
-placeholder="Price"
-step="0.01"
-value={form.price}
-onChange={(e)=>setForm({...form, price:Number(e.target.value)})}
-/>
+      {/* LISTA */}
+      <h4 className="mb-3">Lista Tickets</h4>
 
- <button type="submit">{editingId ? "Salva Modifiche" : "Aggiungi"}</button>
-          {editingId && (
-            <button type="button" onClick={() => { 
-              setForm({ day: "", date: "", opponents: "", stadium: "" , price:""});
-              setEditingId(null);
-            }}>Annulla</button>
-          )}
+      <Row>
+        {tickets.map((n) => (
+          <Col md={4} sm={6} key={n.id} className="mb-4">
+            <Card className="h-100 shadow-sm">
+              <Card.Body className="d-flex flex-column">
+                <Card.Title>
+                  {n.day} - {n.opponents}
+                </Card.Title>
 
-</form>
+                <Card.Text>{n.stadium}</Card.Text>
+                <Card.Text>
+                  <strong>€{n.price}</strong>
+                </Card.Text>
 
-<h2>Lista Tickets</h2>
+                {/* BOTTONI IN FONDO */}
+                <div className="d-flex justify-content-between mt-auto">
+                  <Button
+                    size="sm"
+                    variant="warning"
+                    onClick={() => editTicket(n)}
+                  >
+                    Modifica
+                  </Button>
 
-{tickets.map(n => (
-<div key={n.id}>
-<h3>{n.day} - {n.opponents}</h3>
-<p>{n.stadium} | €{n.price}</p>
- <button onClick={() => editTicket(n)}>Modifica</button>
-<button onClick={() => deleteTicket(n.id)}>Elimina</button>
-</div>
-))}
-
-</div>
-
-</>
-)
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => deleteTicket(n.id)}
+                  >
+                    Elimina
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  </>
+);
 }
 
 export default AdminTickets

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useEffect, useState } from "react";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { Card, Form, Row, Col, Button } from "react-bootstrap";
 
 function AdminShop(){
     const[product, setProduct]= useState([])
@@ -75,74 +75,154 @@ const deleteProduct = (id) => {
     setEditingId(n.id);
   }
 
-    return(
-
-        <>
-
-    <Navbar expand="lg" className="bg-body-tertiary">
+    return (
+  <>
+    <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Brand>Admin Panel</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
           <Nav className="me-auto">
-            <Nav.Link href="/adminNews">NEWS</Nav.Link>
-            <Nav.Link href="/adminShop">SHOP</Nav.Link>
-            <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
-     <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
+            <Nav.Link href="/adminNews">News</Nav.Link>
+            <Nav.Link href="/adminShop">Shop</Nav.Link>
+            <Nav.Link href="/adminTickets">Tickets</Nav.Link>
+            <Nav.Link href="/adminPartite">Partite</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  
 
+    <Container>
+      {/* FORM */}
+      <Card className="mb-4 shadow">
+        <Card.Body>
+          <Card.Title>
+            {editingId ? "Modifica Prodotto" : "Aggiungi Prodotto"}
+          </Card.Title>
 
-<div>
+          <Form onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  placeholder="Nome prodotto"
+                  value={form.name_product}
+                  onChange={(e) =>
+                    setForm({ ...form, name_product: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<h2>Aggiungi Prodotto</h2>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  placeholder="Descrizione"
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<form onSubmit={handleSubmit}>
-<input placeholder="Nome del prodotto"
-  value={form.name_product}
-onChange={(e)=>setForm({...form, name_product:e.target.value})}
-/>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  placeholder="Image URL"
+                  value={form.imageUrl}
+                  onChange={(e) =>
+                    setForm({ ...form, imageUrl: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<input placeholder="Descrizione"
-value={form.description}
-onChange={(e)=>setForm({...form,description:e.target.value})}
-/>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  type="number"
+                  placeholder="Prezzo"
+                  value={form.price}
+                  onChange={(e) =>
+                    setForm({ ...form, price: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-<input placeholder="Image URL"
-value={form.imageUrl}
-onChange={(e)=>setForm({...form,imageUrl:e.target.value})}
-/>
+            <div className="d-flex gap-2">
+              <Button type="submit" variant="primary">
+                {editingId ? "Salva" : "Aggiungi"}
+              </Button>
 
-<input type="number"
-placeholder="Price"
-value={form.price}
-onChange={(e)=>setForm({...form,price:e.target.value})}
-/>
+              {editingId && (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setForm({
+                      name_product: "",
+                      description: "",
+                      price: "",
+                      imageUrl: "",
+                    });
+                    setEditingId(null);
+                  }}
+                >
+                  Annulla
+                </Button>
+              )}
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
 
-<button type="submit">{editingId ? "Salva Modifiche" : "Aggiungi"}</button>
-          {editingId && (
-            <button type="button" onClick={() => { 
-              setForm({ name_product: "", description: "", price: "", imageUrl: "" });
-              setEditingId(null);
-            }}>Annulla</button>
-          )}
-</form>
+      {/* LISTA PRODOTTI */}
+      <h4 className="mb-3">Lista Prodotti</h4>
 
-<h2>Lista Prodotti</h2>
+      <Row>
+        {product.map((n) => (
+          <Col md={4} key={n.id} className="mb-4">
+            <Card className="h-100 shadow-sm">
+              {n.imageUrl && (
+                <Card.Img
+                  variant="top"
+                  src={n.imageUrl}
+                  
+                />
+              )}
 
-{product.map(n => (
-    <div key={n.id}>
-<h3>{n.name_product}</h3>
-<button onClick={()=>editProduct(n)}>Modifica</button>
-<button onClick={()=>deleteProduct(n.id)}>Elimina</button>
-</div>
-))}
+              <Card.Body className="d-flex flex-column">
+                <Card.Title>{n.name_product}</Card.Title>
+                <Card.Text>{n.description}</Card.Text>
+                <Card.Text>
+                  <strong>{n.price} €</strong>
+                </Card.Text>
 
-</div>
-</>
-    )
+                {/* BOTTONI IN FONDO */}
+                <div className="d-flex justify-content-between mt-auto">
+                  <Button
+                    size="sm"
+                    variant="warning"
+                    onClick={() => editProduct(n)}
+                  >
+                    Modifica
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => deleteProduct(n.id)}
+                  >
+                    Elimina
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  </>
+);
 }
 export default AdminShop

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import { Card, Form, Row, Col, Button } from "react-bootstrap";
 function AdminPartite() {
   const [match, setMatch] = useState([]);
   const [form, setForm] = useState({
@@ -72,66 +72,129 @@ function AdminPartite() {
     setEditingId(n.id);
   }
   return (
-    <>
-      <Navbar expand="lg" className="bg-body-tertiary">
-        <Container>
-          <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="/adminNews">NEWS</Nav.Link>
-              <Nav.Link href="/adminShop">SHOP</Nav.Link>
-              <Nav.Link href="/adminTickets">TICKETS</Nav.Link>
-              <Nav.Link href="/adminPartite">PARTITE</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+  <>
+    <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
+      <Container>
+        <Navbar.Brand>Admin Panel</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Nav className="me-auto">
+            <Nav.Link href="/adminNews">News</Nav.Link>
+            <Nav.Link href="/adminShop">Shop</Nav.Link>
+            <Nav.Link href="/adminTickets">Tickets</Nav.Link>
+            <Nav.Link href="/adminPartite">Partite</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
 
-      <div>
-        <h2>Aggiungi Match</h2>
+    <Container>
+      {/* FORM */}
+      <Card className="mb-4 shadow">
+        <Card.Body>
+          <Card.Title>
+            {editingId ? "Modifica Partita" : "Aggiungi Partita"}
+          </Card.Title>
 
-        <form onSubmit={handleSubmit}>
-          <input
-           type="text"
-    placeholder="Squadra di casa"
-            onChange={(e) => setForm({ ...form, casa: e.target.value })}
-          />
+          <Form onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Squadra di casa"
+                  value={form.casa}
+                  onChange={(e) =>
+                    setForm({ ...form, casa: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-          <input
-           type="text"
-    placeholder="Squadra trasferta"
-            onChange={(e) => setForm({ ...form, trasferta: e.target.value })}
-          />
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Squadra trasferta"
+                  value={form.trasferta}
+                  onChange={(e) =>
+                    setForm({ ...form, trasferta: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-          <input
-           type="date"
-    placeholder="Data"
-            onChange={(e) => setForm({ ...form, data: e.target.value })}
-          />
+            <Row className="mb-3">
+              <Col>
+                <Form.Control
+                  type="date"
+                  value={form.data}
+                  onChange={(e) =>
+                    setForm({ ...form, data: e.target.value })
+                  }
+                />
+              </Col>
+            </Row>
 
-          <button type="submit">{editingId ? "Salva Modifiche" : "Aggiungi"}</button>
-          {editingId && (
-            <button type="button" onClick={() => { 
-              setForm({ casa: "", trasferta: "", data: "" });
-              setEditingId(null);
-            }}>Annulla</button>
-          )}
-        </form>
+            <div className="d-flex gap-2">
+              <Button type="submit" variant="primary">
+                {editingId ? "Salva" : "Aggiungi"}
+              </Button>
 
-        <h2>Lista Partite</h2>
+              {editingId && (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setForm({ casa: "", trasferta: "", data: "" });
+                    setEditingId(null);
+                  }}
+                >
+                  Annulla
+                </Button>
+              )}
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
 
+      {/* LISTA */}
+      <h4 className="mb-3">Lista Partite</h4>
+
+      <Row>
         {match.map((n) => (
-          <div key={n.id}>
-            <span>{n.casa + " VS "}</span>
-            <span>{n.trasferta + " : "}</span>
-            <span className="me-2">{n.data}</span>
-            <button onClick={() => editTicket(n)}>Modifica</button>
-            <button onClick={() => deleteMatch(n.id)}>Elimina</button>
-          </div>
+          <Col md={4} key={n.id} className="mb-4">
+            <Card className="h-100 shadow-sm">
+              <Card.Body className="d-flex flex-column">
+                <Card.Title>
+                  {n.casa} VS {n.trasferta}
+                </Card.Title>
+
+                <Card.Text>{n.data}</Card.Text>
+
+                {/* BOTTONI IN FONDO */}
+                <div className="d-flex justify-content-between mt-auto">
+                  <Button
+                    size="sm"
+                    variant="warning"
+                    onClick={() => editTicket(n)}
+                  >
+                    Modifica
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => deleteMatch(n.id)}
+                  >
+                    Elimina
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
         ))}
-      </div>
-    </>
-  );
+      </Row>
+    </Container>
+  </>
+);
 }
 export default AdminPartite;
