@@ -24,7 +24,8 @@ public record CarrelloTicketsDTO (
         
         LocalDate dataNascita,
 
-        Boolean acquistato
+        Boolean acquistato,
+        String qrCode
 ) {
 
 }

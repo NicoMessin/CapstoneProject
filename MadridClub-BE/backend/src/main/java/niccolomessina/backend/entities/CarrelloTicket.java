@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -44,8 +45,10 @@ public class CarrelloTicket {
     private LocalDate dataNascita;
     @Column(nullable = false)
     private Boolean acquistato = false;
+    @Column(unique = true, nullable = false)
+    private String qrCode;
 
-    public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket,String nome, String cognome, LocalDate dataNascita, Boolean acquistato){
+    public CarrelloTicket(EnumSettore enumSettore, EnumFila enumFila, EnumPosto enumPosto, Utente utente, Ticket ticket,String nome, String cognome, LocalDate dataNascita, Boolean acquistato, String qrCode){
         this.enumSettore= enumSettore;
         this.enumFila= enumFila;
         this.enumPosto= enumPosto;
@@ -55,6 +58,7 @@ public class CarrelloTicket {
         this.cognome= cognome;
         this.dataNascita= dataNascita;
         this.acquistato= acquistato;
+        this.qrCode = qrCode;
     }
 
 

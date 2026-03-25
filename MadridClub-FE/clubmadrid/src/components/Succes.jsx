@@ -21,8 +21,8 @@ function Success() {
 
   return (
     <div className="container mt-5">
-      <h2>Pagamento completato ✅</h2>
-      <p>I tuoi biglietti sono stati acquistati.</p>
+      <h2>Pagamento completato <i className="bi bi-patch-check-fill text-secondary "></i></h2>
+     
     </div>
   );
 }

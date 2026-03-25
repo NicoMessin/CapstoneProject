@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import AdminDashboard from "./AdminDashboard";
-import UserDashboard from "./UserDashboard";
 
 function Dashboard() {
   const [role, setRole] = useState("NON_LOGGATO");
@@ -74,15 +72,15 @@ function Dashboard() {
 
           {role === "USER" && (
             <>
-              <p className="subtitle">Benvenuto utente 👋</p>
-              <UserDashboard />
+              <p className="subtitle">Benvenuto utente <i className="bi bi-person-raised-hand"></i></p>
+              
             </>
           )}
 
           {role === "ADMIN" && (
             <>
-              <p className="subtitle">Pannello amministratore ⚙️</p>
-              <AdminDashboard />
+              <p className="subtitle">Pannello amministratore <i className="bi bi-gear"></i></p>
+             
             </>
           )}
 

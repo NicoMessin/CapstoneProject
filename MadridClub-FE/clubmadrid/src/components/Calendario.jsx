@@ -49,9 +49,9 @@ function Calendario() {
   return (
     <div className="container my-3">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <button className="btn btn-primary" onClick={mesePrecedente}>◀</button>
+        <button className="btn  iconaCalendario" onClick={mesePrecedente}><i className="bi bi-arrow-left-square "></i></button>
         <h2>{mesi[mese]} {anno}</h2>
-        <button className="btn btn-primary" onClick={meseSuccessivo}>▶</button>
+        <button className="btn  iconaCalendario" onClick={meseSuccessivo}><i className="bi bi-arrow-right-square "></i></button>
       </div>
 
       {/* Giorni settimana */}
@@ -70,7 +70,7 @@ function Calendario() {
                 <>
                   <div className="fw-bold">{cella.giorno}</div>
                   {cella.partite.map(p => (
-                    <div key={p.id} className="bg-info text-white rounded px-1 my-1" style={{fontSize:"12px"}}>
+                    <div key={p.id} className="bg-secondary text-white rounded px-1 my-1 text-center" style={{fontSize:"12px"}}>
                       {p.casa} vs {p.trasferta}
                     </div>
                   ))}

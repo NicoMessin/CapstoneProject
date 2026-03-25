@@ -54,13 +54,13 @@ public class CarrelloTicketService {
         ct.setEnumFila(payload.enumFila());
         ct.setEnumPosto(payload.enumPosto());
 
-        // FIX fondamentale
         ct.setAcquistato(false);
 
         ct.setNome(payload.nome());
         ct.setCognome(payload.cognome());
         ct.setDataNascita(payload.dataNascita());
-
+        // GENERAZIONE QR CODE
+        ct.setQrCode(UUID.randomUUID().toString());
         return carrelloTicketRepository.save(ct);
     }
 
