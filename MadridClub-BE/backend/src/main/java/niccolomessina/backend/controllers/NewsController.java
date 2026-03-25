@@ -31,9 +31,9 @@ public class NewsController {
         return newsService.getAllNews();
     }
 
-    // GET /news/{id} → recupera news per ID (USER e ADMIN)
+    // GET /news/{id} → recupera news per ID
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+
     public News getNewsById(@PathVariable UUID id) {
         return newsService.getNewsById(id);
     }
@@ -59,6 +59,8 @@ public class NewsController {
         newsService.deleteNews(id);
     }
 
+
+    //MODIFICA NEWS
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public News editNews(@PathVariable UUID id, @RequestBody @Validated NewsDTO payload) {

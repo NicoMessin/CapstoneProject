@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import Card from "react-bootstrap/Card";
 import { Container, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 function Home() {
   const [news, setNews] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch("http://localhost:3001/news") // il tuo backend REST
@@ -78,7 +80,7 @@ function Home() {
               {news.slice(8, 10).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" ,}} className=" rounded-4 cardHomeImage">
+                    <Card  className=" rounded-4 cardHomeImage" onClick={()=> navigate(`/singleNews/${item.id}`)}>
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -86,7 +88,14 @@ function Home() {
                       />
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
-                        <Card.Text >{item.description}</Card.Text>
+                        <Card.Text className="d-none d-sm-block">{item.description}</Card.Text>
+                          <Card.Text className="d-none d-sm-block">{new Date(item.publishedAt).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</Card.Text>
                       </Card.Body>
                     </Card>
                   </div>
@@ -104,7 +113,7 @@ function Home() {
               {news.slice(11, 13).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className="rounded-4 cardHomeImage">
+                    <Card  className="rounded-4 cardHomeImage" onClick={()=> navigate(`/singleNews/${item.id}`)}>
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -112,7 +121,14 @@ function Home() {
                       />
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
-                        <Card.Text>{item.description}</Card.Text>
+                        <Card.Text className="d-none d-sm-block">{item.description}</Card.Text>
+                         <Card.Text className="d-none d-sm-block">{new Date(item.publishedAt).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</Card.Text>
                       </Card.Body>
                     </Card>
                   </div>
@@ -130,7 +146,7 @@ function Home() {
               {news.slice(14, 16).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className=" rounded-4 cardHomeImage">
+                    <Card  className=" rounded-4 cardHomeImage" onClick={()=> navigate(`/singleNews/${item.id}`)}>
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -138,7 +154,14 @@ function Home() {
                       />
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
-                        <Card.Text>{item.description}</Card.Text>
+                          <Card.Text>{item.description}</Card.Text>
+                         <Card.Text>{new Date(item.publishedAt).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</Card.Text>
                       </Card.Body>
                     </Card>
                   </div>
@@ -156,7 +179,7 @@ function Home() {
               {news.slice(17, 20).map((item) => (
                 <Carousel.Item key={item.id}>
                   <div className="d-flex justify-content-center py-5 w-100">
-                    <Card style={{ width: "18rem" }} className="rounded-4 cardHomeImage">
+                    <Card className="rounded-4 cardHomeImage" onClick={()=> navigate(`/singleNews/${item.id}`)}>
                       <Card.Img
                         variant="top"
                         src={item.imageUrl}
@@ -165,6 +188,13 @@ function Home() {
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
                         <Card.Text>{item.description}</Card.Text>
+                         <Card.Text>{new Date(item.publishedAt).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</Card.Text>
                       </Card.Body>
                     </Card>
                   </div>

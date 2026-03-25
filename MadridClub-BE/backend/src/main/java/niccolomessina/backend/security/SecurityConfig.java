@@ -30,7 +30,7 @@ public class SecurityConfig {
         httpSecurity.cors(cors -> {});
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers("/stripe/webhook").permitAll()
-                .requestMatchers("/auth/**", "/news", "/tickets", "/products", "/carrelloItemsShop", "/partite").permitAll()
+                .requestMatchers("/auth/**", "/news/**", "/tickets", "/products", "/carrelloItemsShop", "/partite").permitAll()
                 .requestMatchers("/carrelloTickets/**", "/stripe/**").authenticated()
                 .anyRequest().authenticated()
         );
