@@ -13,7 +13,12 @@ function Tickets() {
       .then((res) =>
         res.ok ? res.json() : Promise.reject("Errore nel recupero del ticket"),
       )
-      .then((data) => setTicket(data))
+      .then((data) => {
+  const sorted = [...data].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+  setTicket(sorted);
+})
       .catch((err) => console.error("Errore fetching ticket:", err));
   }, []);
 

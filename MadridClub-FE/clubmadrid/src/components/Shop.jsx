@@ -11,13 +11,19 @@ function Shop() {
 
   // fetch prodotti
   useEffect(() => {
-    fetch("http://localhost:3001/products")
-      .then((res) =>
-        res.ok ? res.json() : Promise.reject("Errore fetching prodotti"),
-      )
-      .then((data) => setProduct(data))
-      .catch((err) => console.error(err));
-  }, []);
+  fetch("http://localhost:3001/products")
+    .then((res) =>
+      res.ok ? res.json() : Promise.reject("Errore fetching prodotti"),
+    )
+    .then((data) => {
+      // ordine fisso per utenti
+      const sorted = [...data].sort(
+        (a, b) => Number(a.price) - Number(b.price)
+      );
+      setProduct(sorted);
+    })
+    .catch((err) => console.error(err));
+}, []);
 
   // fetch carrello per contatore
   const fetchCartCount = () => {

@@ -13,7 +13,12 @@ function Home() {
         if (!res.ok) throw new Error("Errore nel recupero delle news");
         return res.json();
       })
-      .then((data) => setNews(data))
+      .then((data) => {
+  const sorted = data.sort(
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+  );
+  setNews(sorted);
+})
       .catch((err) => console.error("Errore fetching news:", err));
   }, []);
 

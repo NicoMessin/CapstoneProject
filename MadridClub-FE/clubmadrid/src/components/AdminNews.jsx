@@ -41,11 +41,20 @@ function AdminNews() {
       },
       body: JSON.stringify(form),
     })
-      .then(() => {
-        getNews();
-        setForm({ title: "", description: "", imageUrl: "", publishedAt: "" });
-        setEditingId(null); // reset form
-      })
+      .then((res) => res.json())
+.then((updatedItem) => {
+  if (editingId) {
+   
+    setNews(news.map(n => 
+      n.id === editingId ? updatedItem : n
+    ));
+  } else {
+    setNews([...news, updatedItem]);
+  }
+
+  setForm({ title: "", description: "", imageUrl: "", publishedAt: "" });
+  setEditingId(null);
+})
       .catch((err) => console.log(err));
   };
 

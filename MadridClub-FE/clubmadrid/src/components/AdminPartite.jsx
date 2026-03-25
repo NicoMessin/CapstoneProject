@@ -164,11 +164,11 @@ function AdminPartite() {
           <Col md={4} key={n.id} className="mb-4">
             <Card className="h-100 shadow-sm">
               <Card.Body className="d-flex flex-column">
-                <Card.Title>
+                <Card.Title className="text-center">
                   {n.casa} VS {n.trasferta}
                 </Card.Title>
 
-                <Card.Text>{n.data}</Card.Text>
+                <Card.Text className="text-center text-secondary">{n.data}</Card.Text>
 
                 {/* BOTTONI IN FONDO */}
                 <div className="d-flex justify-content-between mt-auto">

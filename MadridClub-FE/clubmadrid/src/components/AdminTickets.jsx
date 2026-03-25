@@ -22,7 +22,12 @@ const [editingId, setEditingId] = useState(null);
 const getTickets = () => {
   fetch("http://localhost:3001/tickets")
     .then(res => res.json())
-    .then(data => setTickets(data))
+    .then((data) => {
+  const sorted = [...data].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+  setTickets(sorted);
+})
     .catch(err => console.log(err))
 }
 
@@ -200,15 +205,21 @@ return (
         {tickets.map((n) => (
           <Col md={4} sm={6} key={n.id} className="mb-4">
             <Card className="h-100 shadow-sm">
-              <Card.Body className="d-flex flex-column">
-                <Card.Title>
-                  {n.day} - {n.opponents}
+              <Card.Body className="d-flex flex-column justify-content-center">
+                <Card.Title className="text-center">
+                  {n.day}  
+                  <Card.Text className="text-secondary mt-2"> {new Date(n.date).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</Card.Text>
                 </Card.Title>
 
-                <Card.Text>{n.stadium}</Card.Text>
-                <Card.Text>
-                  <strong>€{n.price}</strong>
-                </Card.Text>
+                <Card.Text className="text-center">{n.opponents}</Card.Text>
+                <Card.Text className="text-center mb-4">{n.stadium}</Card.Text>
+               
 
                 {/* BOTTONI IN FONDO */}
                 <div className="d-flex justify-content-between mt-auto">
