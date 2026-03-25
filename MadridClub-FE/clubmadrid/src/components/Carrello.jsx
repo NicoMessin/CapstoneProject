@@ -122,7 +122,7 @@ const aggiornaItem = (id, quantita, taglia) => {
       <div key={item.id} className="card mb-3 shadow-sm">
         <div className="row g-3 align-items-center p-3">
           {/* Immagine */}
-          <div className="col-md-2 text-center">
+          <div className="col-sm-2 text-center">
             <img
               src={item.prodotto.imageUrl}
               alt={item.prodotto.name_product}
@@ -131,7 +131,7 @@ const aggiornaItem = (id, quantita, taglia) => {
           </div>
 
           {/* Info prodotto */}
-          <div className="col-md-6">
+          <div className="col-sm-6">
             <h5 className="card-title">{item.prodotto.name_product}</h5>
             <p className="mb-1">Prezzo unitario: <strong>€{item.prodotto.price}</strong></p>
 
@@ -163,7 +163,7 @@ const aggiornaItem = (id, quantita, taglia) => {
           </div>
 
           {/* Totale e pulsante */}
-          <div className="col-md-4 d-flex flex-column align-items-end justify-content-between">
+          <div className="col-sm-4 d-flex flex-column align-items-end justify-content-between">
             <p className="mb-2">Totale: <strong>€{item.prodotto.price * item.quantita}</strong></p>
             <button className="btn btn-danger btn-sm" onClick={() => eliminaItem(item.id)}>
               Elimina
@@ -177,7 +177,7 @@ const aggiornaItem = (id, quantita, taglia) => {
     {itemCarrello.length > 0 && (
       <div className="d-flex justify-content-between align-items-center mt-4">
         <h4>Totale Carrello: €{totaleCarrello}</h4>
-        <button className="btn btn-warning" onClick={svuotaCarrello}>
+        <button className="btn btn-warning mb-2" onClick={svuotaCarrello}>
           Svuota Carrello
         </button>
       </div>

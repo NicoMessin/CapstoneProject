@@ -183,7 +183,13 @@ function CarrelloTickets() {
             <div className="card-body card-bodyTicketShop">
 
               <h5 className="card-title">
-                {item.ticket.day} - {item.ticket.date}
+                {item.ticket.day} - {new Date(item.ticket.date).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
               </h5>
 
               <h6 className="card-subtitle mb-2 text-muted">
@@ -340,11 +346,11 @@ function CarrelloTickets() {
         <div className="d-flex justify-content-between align-items-center mt-4">
           <h4>Totale Carrello: €{totaleCarrello}</h4>
 
-          <button className="btn btn-warning" onClick={svuotaCarrello}>
+          <button className="btn btn-warning m-2" onClick={svuotaCarrello}>
             Svuota Carrello
           </button>
 
-          <button className="btn btn-success" onClick={paga}>
+          <button className="btn btn-success ms-2" onClick={paga}>
             Procedi al pagamento
           </button>
         </div>

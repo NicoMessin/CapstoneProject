@@ -35,7 +35,8 @@ function Home() {
               {news.slice(0, 3).map((item) => (
                 <Carousel.Item key={item.id}>
                   <img
-                    className="d-block w-100  rounded-5 carouselImg"
+                  onClick={()=> navigate(`/singleNews/${item.id}`)}
+                    className="d-block w-100  rounded-5 carouselImg "
                     src={item.imageUrl}
                     alt={item.title}
               
@@ -53,6 +54,7 @@ function Home() {
               {news.slice(4, 7).map((item) => (
                 <Carousel.Item key={item.id}>
                   <img
+                  onClick={()=> navigate(`/singleNews/${item.id}`)}
                     className="d-block w-100 rounded-5 carouselImg"
                     src={item.imageUrl}
                     alt={item.title}
@@ -89,7 +91,7 @@ function Home() {
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
                         <Card.Text className="d-none d-sm-block">{item.description}</Card.Text>
-                          <Card.Text className="d-none d-sm-block">{new Date(item.publishedAt).toLocaleString("it-IT", {
+                          <Card.Text className="d-none d-sm-block text-muted">{new Date(item.publishedAt).toLocaleString("it-IT", {
                     day: "2-digit",
                     month: "2-digit",
                     year: "numeric",
@@ -122,7 +124,7 @@ function Home() {
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
                         <Card.Text className="d-none d-sm-block">{item.description}</Card.Text>
-                         <Card.Text className="d-none d-sm-block">{new Date(item.publishedAt).toLocaleString("it-IT", {
+                         <Card.Text className="d-none d-sm-block text-muted">{new Date(item.publishedAt).toLocaleString("it-IT", {
                     day: "2-digit",
                     month: "2-digit",
                     year: "numeric",
@@ -155,7 +157,7 @@ function Home() {
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
                           <Card.Text>{item.description}</Card.Text>
-                         <Card.Text>{new Date(item.publishedAt).toLocaleString("it-IT", {
+                         <Card.Text className="text-muted">{new Date(item.publishedAt).toLocaleString("it-IT", {
                     day: "2-digit",
                     month: "2-digit",
                     year: "numeric",
@@ -188,7 +190,7 @@ function Home() {
                       <Card.Body className="overflow-hidden">
                         <Card.Title>{item.title}</Card.Title>
                         <Card.Text>{item.description}</Card.Text>
-                         <Card.Text>{new Date(item.publishedAt).toLocaleString("it-IT", {
+                         <Card.Text className="text-muted">{new Date(item.publishedAt).toLocaleString("it-IT", {
                     day: "2-digit",
                     month: "2-digit",
                     year: "numeric",

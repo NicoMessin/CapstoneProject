@@ -141,7 +141,7 @@ function Tickets() {
         {ticket.map((item) => (
           <Col key={item.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
             <div className="ticket-card h-100 d-flex flex-column justify-content-between">
-              <div>
+              <div className="divTicket">
                 <h5 className="ticket-title">{item.day}</h5>
                 <p className="ticket-text">
                   {new Date(item.date).toLocaleString("it-IT", {

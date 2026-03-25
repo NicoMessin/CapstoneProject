@@ -224,3 +224,9 @@
   min-height: 220px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
+
+
+.divTicket{display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;}
