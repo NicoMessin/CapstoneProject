@@ -48,7 +48,7 @@ function Tickets() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Per acqiistare un ticket è necessario effettuare il login");
+      alert("Per acquistare un ticket è necessario effettuare il login");
       navigate("/auth/Login");
       return;
     }

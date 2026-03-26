@@ -89,7 +89,7 @@ const aggiornaItem = (id, quantita, taglia) => {
         quantity: item.quantita
       }));
       
-      fetch("http://localhost:3001/stripe/checkout", {
+      fetch("http://localhost:3001/stripe/checkout/shop", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(items)

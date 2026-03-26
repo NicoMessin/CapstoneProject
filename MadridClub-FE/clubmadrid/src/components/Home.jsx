@@ -33,7 +33,7 @@ function Home() {
           <Col sm={6}>
             {/* CAROSELLI PRINCIPALI */}
             <Carousel
-              interval={5000}
+              interval={3000}
               controls={false}
               className="mt-4  "
             >
@@ -55,7 +55,7 @@ function Home() {
             </Carousel>
           </Col>
           <Col sm={6}>
-            <Carousel interval={5000} controls={false} className="mt-4 d-none d-sm-block">
+            <Carousel interval={3000} controls={false} className="mt-4 d-none d-sm-block">
               {news.slice(4, 7).map((item) => (
                 <Carousel.Item key={item.id}>
                   <img
@@ -79,7 +79,7 @@ function Home() {
         <Row>
           <Col xs={6} sm={4} md={3}>
             <Carousel
-              interval={6000}
+              interval={5000}
               controls={false}
               indicators={false}
               className="carousel-peek "
@@ -112,7 +112,7 @@ function Home() {
           </Col>
           <Col xs={6} md={3} sm={4}>
             <Carousel
-              interval={6000}
+              interval={5000}
               controls={false}
               indicators={false}
               className="carousel-peek "
@@ -145,7 +145,7 @@ function Home() {
           </Col>
           <Col md={3} sm={4}>
             <Carousel
-              interval={6000}
+              interval={5000}
               controls={false}
               indicators={false}
               className="carousel-peek d-none d-sm-block"
@@ -178,7 +178,7 @@ function Home() {
           </Col>
           <Col md={3}>
             <Carousel
-              interval={6000}
+              interval={5000}
               controls={false}
               indicators={false}
               className="carousel-peek d-none d-md-block"

@@ -55,7 +55,7 @@ public class EmailService {
             System.out.println("EMAIL INVIATA");
 
         } catch (Exception e) {
-            System.out.println("❌ ERRORE INVIO EMAIL");
+            System.out.println(" ERRORE INVIO EMAIL");
             e.printStackTrace();
         }
     }

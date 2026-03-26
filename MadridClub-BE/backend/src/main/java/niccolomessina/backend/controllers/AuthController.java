@@ -6,6 +6,7 @@ import niccolomessina.backend.payloads.LoginDTO;
 import niccolomessina.backend.payloads.LoginResponseDTO;
 import niccolomessina.backend.payloads.UtentiDTO;
 import niccolomessina.backend.services.AuthService;
+import niccolomessina.backend.services.EmailService;
 import niccolomessina.backend.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class AuthController {
 
     private final AuthService authService;
     private final UtenteService utenteService;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     public AuthController(AuthService authService, UtenteService utenteService) {
@@ -48,7 +51,20 @@ public class AuthController {
 
             throw new ValidationException(errorList);
         } else {
-            return this.utenteService.saveUtente(payload);
+           Utente utente = this.utenteService.saveUtente(payload);
+            // INVIO EMAIL
+            String subject = "Benvenuto su MyApp!";
+            String text = "Ciao " + utente.getNome() + ", Grazie per esserti registrato!";
+
+            try {
+                emailService.sendEmail(utente.getEmail(), subject, text);
+                System.out.println("EMAIL DI BENVENUTO INVIATA A: " + utente.getEmail());
+            } catch (Exception e) {
+                System.out.println(" ERRORE INVIO EMAIL DI BENVENUTO");
+                e.printStackTrace();
+            }
+
+            return utente;
         }
     }
     @GetMapping("/me")
