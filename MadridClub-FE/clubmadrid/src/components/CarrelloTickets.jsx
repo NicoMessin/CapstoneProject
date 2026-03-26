@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function CarrelloTickets() {
   const [itemCarrello, setItemCarrello] = useState([]);
   const [itemCompleti, setItemCompleti] = useState([]);
-  const [postiDisponibili, setPostiDisponibili] = useState({});
+  const [_postiDisponibili, setPostiDisponibili] = useState({});
   const [postiOccupati, setPostiOccupati] = useState({});
   const token = localStorage.getItem("token");
 
@@ -246,10 +246,7 @@ function CarrelloTickets() {
                   >
                     {"ABCDEFGHIJKLMNOPQR".split("").map((posto) => {
 
-                      const key = item.enumSettore + "_" + item.enumFila;
-
-                      const listaPosti =
-                        postiDisponibili?.[item.ticket.id]?.[key] || [];
+                    
 
                       const acquistatoGlobale = occupati.some(
                         c =>

@@ -24,7 +24,12 @@ function Tickets() {
 
   // fetch carrello count
   const fetchCartCount = () => {
+    
     const token = localStorage.getItem("token");
+    if (!token) {
+    
+    return; 
+  }
 
     fetch("http://localhost:3001/carrelloTickets/mio", {
       headers: { Authorization: `Bearer ${token}` },

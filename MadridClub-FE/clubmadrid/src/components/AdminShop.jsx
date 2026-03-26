@@ -21,6 +21,7 @@ function AdminShop(){
             return res.json()
         })
         .then((data)=>{setProduct(data)})
+        
         .catch((err)=> console.error(err))
     }
     useEffect(() => {
@@ -187,7 +188,7 @@ const deleteProduct = (id) => {
                 <Card.Img
                   variant="top"
                   src={n.imageUrl}
-                  
+                  style={{  objectFit: "cover" }}
                 />
               )}
 

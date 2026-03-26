@@ -50,7 +50,7 @@ public class AuthController {
                     .toList();
 
             throw new ValidationException(errorList);
-        } else {
+        } 
            Utente utente = this.utenteService.saveUtente(payload);
             // INVIO EMAIL
             String subject = "Benvenuto su MyApp!";
@@ -65,7 +65,7 @@ public class AuthController {
             }
 
             return utente;
-        }
+
     }
     @GetMapping("/me")
     public UtentiDTO getCurrentUser(Authentication authentication) {

@@ -41,10 +41,21 @@ function AdminPartite() {
       body: JSON.stringify(form)
     })
     .then(() => {
-      getPartite();
-      setForm({ casa: "", trasferta: "", data: ""});
-      setEditingId(null); // reset form
-    })
+  if (editingId) {
+   
+    setMatch((prev) =>
+      prev.map((m) => (m.id === editingId ? { ...m, ...form } : m))
+    );
+  } else {
+    
+    setMatch((prev) => [...prev, form]);
+  }
+
+  setForm({ casa: "", trasferta: "", data: "" });
+  setEditingId(null);
+})
+    
+    
     .catch(err => console.log(err));
   }
 
@@ -65,7 +76,7 @@ function AdminPartite() {
   const editTicket = (n) => {
     setForm({
       casa: n.casa,
-      trasfera: n.trasfera,
+      trasferta: n.trasferta,
       data: n.data,
      
     });

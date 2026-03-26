@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 function Settings() {
-  const [user, setUser] = useState(null);
+  const [_user, setUser] = useState(null);
   const [form, setForm] = useState({
     nome: "",
     cognome: "",

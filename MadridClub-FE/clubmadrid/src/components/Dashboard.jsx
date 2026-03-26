@@ -8,7 +8,7 @@ function Dashboard() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      setRole("NON_LOGGATO");
+     
       return;
     }
 

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 function Sidebar() {
   const [open, setOpen] = useState(false);
-  const [role, setRole] = useState("NON_LOGGATO");
+  const [_role, setRole] = useState("NON_LOGGATO");
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;

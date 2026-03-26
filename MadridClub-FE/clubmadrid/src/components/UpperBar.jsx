@@ -89,7 +89,9 @@ function UpperBar() {
          <Dropdown.Item href="/auth/Login" >Login</Dropdown.Item>
         <Dropdown.Item href="/auth/Register">Register</Dropdown.Item>
         <Dropdown.Item href="/dashboard">Profile</Dropdown.Item>
-        <Dropdown.Item href="/myTickets">My Tickets</Dropdown.Item>
+          {(role === "ADMIN" || role === "USER") && (
+  <Dropdown.Item href="/myTickets">My Tickets</Dropdown.Item>
+)}
          {role === "ADMIN" && (
     <Dropdown.Item  href="/admin-panel" >Admin Panel
     </Dropdown.Item>
