@@ -13,8 +13,11 @@ public record UtentiDTO(
         String email,
         @NotBlank
         String password,
+        @NotBlank
         String nome,
+        @NotBlank
         String cognome,
+        @NotBlank
         String tipoUtente
 
 ) {

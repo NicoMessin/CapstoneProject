@@ -47,7 +47,17 @@ public class UtenteService {
     }
 
     public Utente saveUtente(UtentiDTO payload) {
-        // TODO: aggiungere controlli su esistenza utente
+        if (utenteRepository.findByEmail(payload.email()).isPresent()) {
+            throw new IllegalArgumentException("Email già registrata");
+        }
+        if (utenteRepository.findByUsername(payload.username()).isPresent()) {
+            throw new IllegalArgumentException("Username già utilizzato");
+        }
+
+
+        if (payload.password().length() < 6) {
+            throw new IllegalArgumentException("La password deve essere lunga almeno 6 caratteri");
+        }
 
         TipoUtente tipoUtente = this.findByTipoUtente(payload.tipoUtente());
 
@@ -65,6 +75,27 @@ public class UtenteService {
     public void  deleteTicket(UUID id){
         Utente utenteDaEliminare = this.findById(id);
         utenteRepository.delete(utenteDaEliminare);
+    }
+
+    //MODIFICA RUOLO
+    public Utente modifyRole(UUID id) {
+        Utente utente = findById(id);
+
+
+        EnumTipoUtente nuovoRuolo = utente.getTipoUtente().getTipoUtente() == EnumTipoUtente.ADMIN
+                ? EnumTipoUtente.USER
+                : EnumTipoUtente.ADMIN;
+
+
+        TipoUtente tipoUtenteEntity = tipoUtenteRepository.findByTipoUtente(nuovoRuolo)
+                .orElseThrow(() -> new NotFoundException(nuovoRuolo.name()));
+
+
+        utente.setTipoUtente(tipoUtenteEntity);
+        utente.setRuolo(nuovoRuolo.name());
+
+
+        return utenteRepository.save(utente);
     }
 
 }

@@ -17,10 +17,8 @@ function Shop() {
     )
     .then((data) => {
       // ordine fisso per utenti
-      const sorted = [...data].sort(
-        (a, b) => Number(a.price) - Number(b.price)
-      );
-      setProduct(sorted);
+      
+      setProduct(data);
     })
     .catch((err) => console.error(err));
 }, []);

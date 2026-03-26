@@ -69,4 +69,11 @@ public class UtenteController {
     public Utente getUtenteByEmail(@PathVariable String email) {
         return utenteService.findByEmail(email);
     }
+
+    //CAMBIA RUOLO UTENTE
+    @PatchMapping("/{id}/modify-role")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Utente modifyRole(@PathVariable UUID id) {
+        return utenteService.modifyRole(id);
+    }
 }

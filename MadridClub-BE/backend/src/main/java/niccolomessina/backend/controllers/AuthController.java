@@ -50,22 +50,9 @@ public class AuthController {
                     .toList();
 
             throw new ValidationException(errorList);
-        } 
-           Utente utente = this.utenteService.saveUtente(payload);
-            // INVIO EMAIL
-            String subject = "Benvenuto su MyApp!";
-            String text = "Ciao " + utente.getNome() + ", Grazie per esserti registrato!";
-
-            try {
-                emailService.sendEmail(utente.getEmail(), subject, text);
-                System.out.println("EMAIL DI BENVENUTO INVIATA A: " + utente.getEmail());
-            } catch (Exception e) {
-                System.out.println(" ERRORE INVIO EMAIL DI BENVENUTO");
-                e.printStackTrace();
-            }
-
-            return utente;
-
+        } else {
+            return this.utenteService.saveUtente(payload);
+        }
     }
     @GetMapping("/me")
     public UtentiDTO getCurrentUser(Authentication authentication) {

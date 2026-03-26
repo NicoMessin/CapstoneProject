@@ -27,14 +27,14 @@ public class LoginRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // DA RUNNARE UNA VOLTA
-       //TipoUtente admin = new TipoUtente(EnumTipoUtente.ADMIN);
+      // TipoUtente admin = new TipoUtente(EnumTipoUtente.ADMIN);
         //tipoUtenteService.save(admin);
-        //TipoUtente user = new TipoUtente(EnumTipoUtente.USER);
-       //tipoUtenteService.save(user);
-         //DA RUNNARE UNA VOLTA
-        //UtentiDTO admino = new UtentiDTO("admino", "admino@email.com",
-               //secret, "Adamo", "Mela", "ADMIN");
-       //utenteService.saveUtente(admino);
+      //  TipoUtente user = new TipoUtente(EnumTipoUtente.USER);
+      // tipoUtenteService.save(user);
+        // DA RUNNARE UNA VOLTA
+       // UtentiDTO Admin = new UtentiDTO("admino", "admino01@email.com",
+         //      secret, "Admin", "First", "ADMIN");
+       //utenteService.saveUtente(Admin);
         //UtentiDTO userino = new UtentiDTO("userino", "userino@email.com",
         //secret, "Eva", "Mela", "USER");
         //utenteService.saveUtente(userino);
