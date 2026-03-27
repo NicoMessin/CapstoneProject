@@ -143,32 +143,27 @@ function CarrelloTickets() {
   };
 
   const paga = () => {
-    fetch("http://localhost:3001/carrelloTickets/mio", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(res => res.json())
-      .then(carrello => {
-        const items = carrello.map(item => ({
-          settore: item.enumSettore,
-          price: prezziSettore[item.enumSettore],
-          quantity: 1,
-          partita: item.ticket.opponents
-        }));
 
-        return fetch("http://localhost:3001/stripe/checkout-tickets", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(items)
-        });
-      })
-      .then(res => res.json())
-      .then(data => {
-        window.location.href = data.url;
-      });
-  };
+  const items = itemCarrello.map(item => ({
+    settore: item.enumSettore,
+    price: prezziSettore[item.enumSettore],
+    quantity: 1,
+    partita: item.ticket.opponents
+  }));
+
+  fetch("http://localhost:3001/stripe/checkout-tickets", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(items)
+  })
+    .then(res => res.json())
+    .then(data => {
+      window.location.href = data.url;
+    });
+};
 
   const totaleCarrello = itemCarrello.reduce(
     (sum, item) => sum + prezziSettore[item.enumSettore],
