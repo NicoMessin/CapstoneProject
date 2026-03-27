@@ -3,6 +3,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
+import "../css/Admin.css";
+
 function AdminPartite() {
   const [match, setMatch] = useState([]);
   const [form, setForm] = useState({
@@ -84,9 +86,9 @@ function AdminPartite() {
   }
   return (
   <>
-    <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
+    <Navbar  bg="dark" variant="dark" className="mb-4">
       <Container>
-        <Navbar.Brand>Admin Panel</Navbar.Brand>
+        <Navbar.Brand>Edit</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="me-auto">

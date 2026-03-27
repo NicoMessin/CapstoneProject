@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import "../css/Calendario.css";
 
 function Calendario() {
   const [dataCorrente, setDataCorrente] = useState(new Date());
@@ -10,9 +10,9 @@ function Calendario() {
 
   useEffect(() => {
     fetch(`http://localhost:3001/partite`)
-      .then(res => res.json())
-      .then(data => setPartite(data))
-      .catch(err => console.error(err));
+      .then((res) => res.json())
+      .then((data) => setPartite(data))
+      .catch((err) => console.error(err));
   }, [mese, anno]);
 
   const firstDay = new Date(anno, mese, 1).getDay();
@@ -24,22 +24,35 @@ function Calendario() {
     if (i < firstDay || giorno > daysInMonth) {
       calendario.push(null);
     } else {
-      const dataStr = `${anno}-${String(mese + 1).padStart(2,"0")}-${String(giorno).padStart(2,"0")}`;
-      const partiteGiorno = partite.filter(p => p.data === dataStr);
+      const dataStr = `${anno}-${String(mese + 1).padStart(2, "0")}-${String(giorno).padStart(2, "0")}`;
+      const partiteGiorno = partite.filter((p) => p.data === dataStr);
       calendario.push({ giorno, partite: partiteGiorno });
       giorno++;
     }
   }
 
-  function mesePrecedente() { setDataCorrente(new Date(anno, mese - 1)); }
-  function meseSuccessivo() { setDataCorrente(new Date(anno, mese + 1)); }
+  function mesePrecedente() {
+    setDataCorrente(new Date(anno, mese - 1));
+  }
+  function meseSuccessivo() {
+    setDataCorrente(new Date(anno, mese + 1));
+  }
 
   const mesi = [
-    "Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
-    "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"
+    "Gennaio",
+    "Febbraio",
+    "Marzo",
+    "Aprile",
+    "Maggio",
+    "Giugno",
+    "Luglio",
+    "Agosto",
+    "Settembre",
+    "Ottobre",
+    "Novembre",
+    "Dicembre",
   ];
 
-  
   // Divido in righe di 7 celle
   const righe = [];
   for (let i = 0; i < calendario.length; i += 7) {
@@ -49,15 +62,23 @@ function Calendario() {
   return (
     <div className="container my-3">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <button className="btn  iconaCalendario" onClick={mesePrecedente}><i className="bi bi-arrow-left-square "></i></button>
-        <h2>{mesi[mese]} {anno}</h2>
-        <button className="btn  iconaCalendario" onClick={meseSuccessivo}><i className="bi bi-arrow-right-square "></i></button>
+        <button className="btn  iconaCalendario" onClick={mesePrecedente}>
+          <i className="bi bi-arrow-left-square "></i>
+        </button>
+        <h2>
+          {mesi[mese]} {anno}
+        </h2>
+        <button className="btn  iconaCalendario" onClick={meseSuccessivo}>
+          <i className="bi bi-arrow-right-square "></i>
+        </button>
       </div>
 
       {/* Giorni settimana */}
       <div className="row text-center fw-bold d-none d-sm-flex">
-        {["Dom","Lun","Mar","Mer","Gio","Ven","Sab"].map(d => (
-          <div key={d} className="col border py-1">{d}</div>
+        {["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"].map((d) => (
+          <div key={d} className="col border py-1">
+            {d}
+          </div>
         ))}
       </div>
 
@@ -65,12 +86,16 @@ function Calendario() {
       {righe.map((riga, i) => (
         <div key={i} className="row">
           {riga.map((cella, j) => (
-            <div key={j} className="col border p-2" style={{minHeight: "80px"}}>
+            <div key={j} className="col border p-2 celle">
               {cella && (
                 <>
                   <div className="fw-bold">{cella.giorno}</div>
-                  {cella.partite.map(p => (
-                    <div key={p.id} className="bg-secondary text-white rounded px-1 my-1 text-center" style={{fontSize:"12px"}}>
+                  {cella.partite.map((p) => (
+                    <div
+                      key={p.id}
+                      className="bg-secondary text-white rounded px-1 my-1 text-center partite"
+                      
+                    >
                       {p.casa} vs {p.trasferta}
                     </div>
                   ))}

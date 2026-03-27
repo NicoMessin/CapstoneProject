@@ -3,6 +3,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
+import "../css/Admin.css";
+
 function AdminNews() {
   const [news, setNews] = useState([]);
   const [form, setForm] = useState({
@@ -84,9 +86,9 @@ function AdminNews() {
 
   return (
     <>
-      <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
+      <Navbar  bg="dark" variant="dark" className="mb-4">
         <Container>
-          <Navbar.Brand href="#home">Admin Panel</Navbar.Brand>
+          <Navbar.Brand href="#home">Edit</Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav className="me-auto">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../css/Carrello.css";
 
 function CarrelloTickets() {
   const [itemCarrello, setItemCarrello] = useState([]);

@@ -1,0 +1,76 @@
+/* TICKETS PAGE */
+
+.sfondoTickets {
+  background-image: url("/images/Estadio_.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+.ticket-card {
+  background-color: rgba(var(--bs-dark-rgb)) !important;
+  color: white;
+  border-radius: 20px;
+  padding: 20px;
+  min-height: 220px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+
+.divTicket{display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;}
+
+    /* MY TICKETS PAGE */
+
+     .cardMyTickets {
+ 
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  color: #1a1a1a;
+  border-radius: 20px;
+  border: 2px solid #d4af37; 
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardMyTickets:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.titleTickets {
+  color: #d4af37; 
+  font-weight: bold;
+}
+
+.ticketDay {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.ticketDate {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.ticketMatch {
+  font-weight: 500;
+ 
+}
+
+.stadium {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* CARTCOUNT PER TCKETS E SHOP */
+.cartCount {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: grey;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}

@@ -1,0 +1,9 @@
+.divFormLogin {
+  min-height: 100vh;
+  width: 100%;
+}
+.FormLogin{ width: 100% ; max-width: 400px ;}
+
+.divFormRegister{ min-height: 100vh; width: 100%;}
+
+.FormRegister{width: 100%; max-width: 450px;}

@@ -1,0 +1,15 @@
+.celle {
+  min-height: 80px;
+  min-width: 0;
+}
+
+.partitestyle {
+  font-size: 12px;
+  white-space: normal;
+  word-break: break-word;
+  
+}
+
+.iconaCalendario{color:  white;
+      background-color: #6b7280;
+    }

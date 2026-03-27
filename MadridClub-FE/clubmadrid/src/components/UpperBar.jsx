@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "../css/General.css";
+import "../css/Upperbar.css";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
@@ -99,7 +99,7 @@ function UpperBar() {
         
       </Dropdown.Menu>
     </Dropdown>
-       <Nav.Link as={Link} to="/settings"  >
+       <Nav.Link  >
       <i className="bi bi-gear text-black settings-btn fs-3  mx-3"></i>
       
     </Nav.Link>

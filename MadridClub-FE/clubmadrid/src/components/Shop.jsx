@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/Tickets.css";
 
 function Shop() {
   const [product, setProduct] = useState([]);

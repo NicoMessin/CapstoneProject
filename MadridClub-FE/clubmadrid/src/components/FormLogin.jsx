@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
+import "../css/Form.css";
 
 function FormLogin() {
   const navigate = useNavigate();
@@ -35,8 +36,8 @@ function FormLogin() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-start pt-5 bg-light" style={{ minHeight: "100vh", width: "100%" }}>
-      <Form onSubmit={handleSubmit} className="p-4 rounded-4 shadow-sm bg-white" style={{ width: "100%", maxWidth: "400px" }}>
+    <div className="d-flex justify-content-center align-items-start pt-5 bg-light divFormLogin" >
+      <Form onSubmit={handleSubmit} className="p-4 rounded-4 shadow-sm bg-white FormLogin" >
         <h3 className="text-center mb-4">Login</h3>
 
         

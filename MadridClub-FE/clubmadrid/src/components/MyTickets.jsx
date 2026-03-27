@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
+import "../css/Tickets.css";
 
 function MyTickets() {
   const [myTickets, setMyTickets] = useState([]);

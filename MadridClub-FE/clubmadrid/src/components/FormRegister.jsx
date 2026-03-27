@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
+import "../css/Form.css";
 
 function FormRegister() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function FormRegister() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-start pt-5 bg-light" style={{ minHeight: "100vh", width: "100%" }}>
+    <div className="d-flex justify-content-center align-items-start pt-5 bg-light divFormRegister" >
       <Form onSubmit={handleSubmit} className="p-4 rounded-4 shadow-sm bg-white" style={{ width: "100%", maxWidth: "450px" }}>
         <h3 className="text-center mb-4">Registrazione</h3>
 

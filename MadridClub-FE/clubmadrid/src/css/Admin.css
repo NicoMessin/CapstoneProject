@@ -1,0 +1,68 @@
+
+
+
+.page {
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.navbar {
+  height: 60px;
+  background: #111827;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.logo {
+  margin: 0;
+}
+
+.badge {
+  background: #374151;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.logoutBtn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.containerDash {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.cardDash {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.warning {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+
+
+    
+
+  

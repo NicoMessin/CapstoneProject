@@ -3,6 +3,8 @@ import Carousel from "react-bootstrap/Carousel";
 import Card from "react-bootstrap/Card";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import "../css/Home.css";
+
 function Home() {
   const [news, setNews] = useState([]);
   const navigate = useNavigate()

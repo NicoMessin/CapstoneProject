@@ -2,16 +2,16 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import "../css/Admin.css";
 
 function AdminPanel(){
 
 return(
 <>
 
-    <Navbar expand="lg" bg="dark" variant="dark" className="mb-4">
+    <Navbar  bg="dark" variant="dark" className="mb-4">
         <Container>
-          <Navbar.Brand href="#home">Admin Panel</Navbar.Brand>
+          <Navbar.Brand href="#home" ccl>Edit</Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav className="me-auto">

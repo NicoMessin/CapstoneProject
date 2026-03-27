@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Nav from "react-bootstrap/Nav";
-import "../css/General.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import "../css/Sidebar.css";
 
 function Sidebar() {
   const [open, setOpen] = useState(false);
