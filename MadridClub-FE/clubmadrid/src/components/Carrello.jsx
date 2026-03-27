@@ -181,7 +181,7 @@ const aggiornaItem = (id, quantita, taglia) => {
         <button className="btn btn-warning mb-2" onClick={svuotaCarrello}>
           Svuota Carrello
         </button>
-    <button className="btn btn-success" onClick={paga}>
+    <button className="btn btn-success ms-3" onClick={paga}>
   Procedi al pagamento
 </button>
       </div>

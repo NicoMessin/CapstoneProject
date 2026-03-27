@@ -7,6 +7,7 @@ function CarrelloTickets() {
   const [itemCompleti, setItemCompleti] = useState([]);
   const [_postiDisponibili, setPostiDisponibili] = useState({});
   const [postiOccupati, setPostiOccupati] = useState({});
+  const [erroriInfo, setErroriInfo] = useState({});
   const token = localStorage.getItem("token");
 
   const prezziSettore = {
@@ -36,7 +37,6 @@ function CarrelloTickets() {
       })
       .then((data) => {
         setItemCompleti(data);
-
         const soloCarrello = data.filter(item => item.acquistato !== true);
         setItemCarrello(soloCarrello);
 
@@ -107,7 +107,6 @@ function CarrelloTickets() {
 
   const svuotaCarrello = () => {
     const nonAcquistati = itemCarrello;
-
     Promise.all(
       nonAcquistati.map(item =>
         fetch(`http://localhost:3001/carrelloTickets/${item.id}`, {
@@ -130,10 +129,17 @@ function CarrelloTickets() {
       body: JSON.stringify(campo),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Errore aggiornamento info ticket");
-        fetchCarrello();
+        if (!res.ok) return res.json().then(err => Promise.reject(err));
+        return res.json();
       })
-      .catch((err) => console.error(err));
+      .then(() => {
+        fetchCarrello();
+        setErroriInfo((prev) => ({ ...prev, [id]: null }));
+      })
+      .catch((err) => {
+        const messaggio = err?.message || "Errore aggiornamento info";
+        setErroriInfo((prev) => ({ ...prev, [id]: messaggio }));
+      });
   };
 
   const paga = () => {
@@ -167,6 +173,11 @@ function CarrelloTickets() {
   const totaleCarrello = itemCarrello.reduce(
     (sum, item) => sum + prezziSettore[item.enumSettore],
     0
+  );
+
+  // verifica che tutti i biglietti abbiano nome e cognome
+  const tuttiCampiCompilati = itemCarrello.every(
+    item => item.nome?.trim() && item.cognome?.trim()
   );
 
   return (
@@ -243,11 +254,8 @@ function CarrelloTickets() {
                     onChange={(e) =>
                       aggiornaItem(item.id, item.enumSettore, item.enumFila, e.target.value)
                     }
-                    
                   >
                     {"ABCDEFGHIJKLMNOPQR".split("").map((posto) => {
-
-                    
 
                       const acquistatoGlobale = occupati.some(
                         c =>
@@ -266,7 +274,6 @@ function CarrelloTickets() {
                       );
 
                       let label = posto;
-
                       if (acquistatoGlobale) label += " (ACQUISTATO)";
                       else if (nelCarrello) label += " (IN CARRELLO)";
 
@@ -284,45 +291,45 @@ function CarrelloTickets() {
                 </div>
 
               </div>
+
               <div className="row g-3 mt-2">
 
-  <div className="col-md-4">
-    <label className="form-label">Nome</label>
-    <input
-      type="text"
-      className="form-control"
-      value={item.nome || ""}
-      onChange={(e) =>
-        aggiornaInfo(item.id, { nome: e.target.value })
-      }
-    />
-  </div>
+                <div className="col-md-4">
+                  <label className="form-label">Nome</label>
+                  <input
+                    type="text"
+                    className={`form-control ${erroriInfo[item.id] ? "is-invalid" : ""}`}
+                    value={item.nome || ""}
+                    onChange={(e) => aggiornaInfo(item.id, { nome: e.target.value })}
+                  />
+                  {erroriInfo[item.id] && (
+                    <div className="invalid-feedback">{erroriInfo[item.id]}</div>
+                  )}
+                </div>
 
-  <div className="col-md-4">
-    <label className="form-label">Cognome</label>
-    <input
-      type="text"
-      className="form-control"
-      value={item.cognome || ""}
-      onChange={(e) =>
-        aggiornaInfo(item.id, { cognome: e.target.value })
-      }
-    />
-  </div>
+                <div className="col-md-4">
+                  <label className="form-label">Cognome</label>
+                  <input
+                    type="text"
+                    className={`form-control ${erroriInfo[item.id] ? "is-invalid" : ""}`}
+                    value={item.cognome || ""}
+                    onChange={(e) => aggiornaInfo(item.id, { cognome: e.target.value })}
+                  />
+                </div>
 
-  <div className="col-md-4">
-    <label className="form-label">Data di nascita</label>
-    <input
-      type="date"
-      className="form-control"
-      value={item.dataNascita || ""}
-      onChange={(e) =>
-        aggiornaInfo(item.id, { dataNascita: e.target.value })
-      }
-    />
-  </div>
+                <div className="col-md-4">
+                  <label className="form-label">Data di nascita</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={item.dataNascita || ""}
+                    onChange={(e) =>
+                      aggiornaInfo(item.id, { dataNascita: e.target.value })
+                    }
+                  />
+                </div>
 
-</div>
+              </div>
 
               <div className="mt-3 d-flex justify-content-between align-items-center">
                 <strong>Totale: €{prezzo}</strong>
@@ -348,10 +355,18 @@ function CarrelloTickets() {
             Svuota Carrello
           </button>
 
-          <button className="btn btn-success ms-2" onClick={paga}>
+          <button
+            className="btn btn-success ms-2"
+            onClick={paga}
+            disabled={!tuttiCampiCompilati}
+          >
             Procedi al pagamento
           </button>
         </div>
+      )}
+
+      {!tuttiCampiCompilati && itemCarrello.length > 0 && (
+        <p className="text-danger mt-2">Nome e Cognome sono obbligatori per tutti i biglietti.</p>
       )}
     </div>
   );

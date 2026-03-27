@@ -17,7 +17,7 @@ public record CarrelloTicketsDTO (
         EnumPosto enumPosto,
         @NotNull(message = "L'id del ticket è obbligatorio")
         UUID ticketId,
-
+        
         String nome,
 
         String cognome,

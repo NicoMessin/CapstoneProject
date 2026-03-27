@@ -29,12 +29,12 @@ function Dashboard() {
     <div className="page">
       {/* NAVBAR */}
       <div className="navbar">
-        <h2 className="logo">MyProfile</h2>
+        <h2 className="logo ms-2">MyProfile</h2>
 
         <div>
           {role !== "NON_LOGGATO" ? (
             <button
-              className="logoutBtn"
+              className="logoutBtn me-2"
               onClick={() => {
                 localStorage.removeItem("token");
                 window.location.reload();

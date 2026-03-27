@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Card, Form, Row, Col, Button } from "react-bootstrap";
+import { Card, Form, Row, Col, Button, Alert } from "react-bootstrap";
 import "../css/Admin.css";
 
 function AdminNews() {
@@ -14,6 +14,7 @@ function AdminNews() {
     publishedAt: "",
   });
   const [editingId, setEditingId] = useState(null);
+  const [erroreCampi, setErroreCampi] = useState(""); // nuovo stato per errori
 
   // GET NEWS
   const getNews = () => {
@@ -30,6 +31,15 @@ function AdminNews() {
   // AGGIUNGI / MODIFICA NEWS
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // controllo campi obbligatori
+    if (!form.title.trim() || !form.description.trim() || !form.publishedAt) {
+      setErroreCampi("Tutti i campi obbligatori devono essere compilati!");
+      return;
+    }
+
+    setErroreCampi(""); // reset errore
+
     const url = editingId
       ? `http://localhost:3001/news/${editingId}`
       : "http://localhost:3001/news";
@@ -44,19 +54,15 @@ function AdminNews() {
       body: JSON.stringify(form),
     })
       .then((res) => res.json())
-.then((updatedItem) => {
-  if (editingId) {
-   
-    setNews(news.map(n => 
-      n.id === editingId ? updatedItem : n
-    ));
-  } else {
-    setNews([...news, updatedItem]);
-  }
-
-  setForm({ title: "", description: "", imageUrl: "", publishedAt: "" });
-  setEditingId(null);
-})
+      .then((updatedItem) => {
+        if (editingId) {
+          setNews(news.map((n) => (n.id === editingId ? updatedItem : n)));
+        } else {
+          setNews([...news, updatedItem]);
+        }
+        setForm({ title: "", description: "", imageUrl: "", publishedAt: "" });
+        setEditingId(null);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -82,11 +88,12 @@ function AdminNews() {
       publishedAt: n.publishedAt,
     });
     setEditingId(n.id);
+    setErroreCampi(""); // reset errore quando si inizia modifica
   };
 
   return (
     <>
-      <Navbar  bg="dark" variant="dark" className="mb-4">
+      <Navbar bg="dark" variant="dark" className="mb-4">
         <Container>
           <Navbar.Brand href="#home">Edit</Navbar.Brand>
           <Navbar.Toggle />
@@ -104,9 +111,9 @@ function AdminNews() {
       <Container>
         <Card className="mb-4 shadow">
           <Card.Body>
-            <Card.Title>
-              {editingId ? "Modifica News" : "Aggiungi News"}
-            </Card.Title>
+            <Card.Title>{editingId ? "Modifica News" : "Aggiungi News"}</Card.Title>
+
+            {erroreCampi && <Alert variant="danger">{erroreCampi}</Alert>}
 
             <Form onSubmit={handleSubmit}>
               <Row className="mb-3">
@@ -114,9 +121,7 @@ function AdminNews() {
                   <Form.Control
                     placeholder="Titolo"
                     value={form.title}
-                    onChange={(e) =>
-                      setForm({ ...form, title: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
                     required
                   />
                 </Col>
@@ -127,9 +132,7 @@ function AdminNews() {
                   <Form.Control
                     placeholder="Descrizione"
                     value={form.description}
-                    onChange={(e) =>
-                      setForm({ ...form, description: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, description: e.target.value })}
                     required
                   />
                 </Col>
@@ -140,9 +143,7 @@ function AdminNews() {
                   <Form.Control
                     placeholder="Image URL"
                     value={form.imageUrl}
-                    onChange={(e) =>
-                      setForm({ ...form, imageUrl: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
                   />
                 </Col>
               </Row>
@@ -152,9 +153,7 @@ function AdminNews() {
                   <Form.Control
                     type="datetime-local"
                     value={form.publishedAt}
-                    onChange={(e) =>
-                      setForm({ ...form, publishedAt: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, publishedAt: e.target.value })}
                     required
                   />
                 </Col>
@@ -169,13 +168,9 @@ function AdminNews() {
                   <Button
                     variant="secondary"
                     onClick={() => {
-                      setForm({
-                        title: "",
-                        description: "",
-                        imageUrl: "",
-                        publishedAt: "",
-                      });
+                      setForm({ title: "", description: "", imageUrl: "", publishedAt: "" });
                       setEditingId(null);
+                      setErroreCampi("");
                     }}
                   >
                     Annulla
@@ -192,44 +187,36 @@ function AdminNews() {
           {news.map((n) => (
             <Col sm={6} md={4} key={n.id} className="mb-4">
               <Card className="h-100 shadow-sm">
-  {n.imageUrl && (
-    <Card.Img
-      variant="top"
-      src={n.imageUrl}
-      style={{ height: "200px", objectFit: "cover" }}
-    />
-  )}
+                {n.imageUrl && (
+                  <Card.Img
+                    variant="top"
+                    src={n.imageUrl}
+                    style={{ height: "200px", objectFit: "cover" }}
+                  />
+                )}
                 <Card.Body className="d-flex flex-column">
                   <Card.Title>{n.title}</Card.Title>
                   <Card.Text>{n.description}</Card.Text>
-                  <Card.Text className="text-secondary">{new Date(n.publishedAt).toLocaleString("it-IT", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}</Card.Text>
+                  <Card.Text className="text-secondary">
+                    {new Date(n.publishedAt).toLocaleString("it-IT", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Card.Text>
 
-                 
-    <div className="d-flex justify-content-between mt-auto">
-      <Button
-        size="sm"
-        variant="warning"
-        onClick={() => editNews(n)}
-      >
-        Modifica
-      </Button>
-      <Button
-        size="sm"
-        variant="danger"
-        onClick={() => deleteNews(n.id)}
-      >
-        Elimina
-      </Button>
-    </div>
-  </Card.Body>
-</Card>
-              
+                  <div className="d-flex justify-content-between mt-auto">
+                    <Button size="sm" variant="warning" onClick={() => editNews(n)}>
+                      Modifica
+                    </Button>
+                    <Button size="sm" variant="danger" onClick={() => deleteNews(n.id)}>
+                      Elimina
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
             </Col>
           ))}
         </Row>
@@ -239,3 +226,5 @@ function AdminNews() {
 }
 
 export default AdminNews;
+
+
