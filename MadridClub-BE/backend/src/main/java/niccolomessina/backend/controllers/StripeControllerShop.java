@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import niccolomessina.backend.entities.Utente;
 import niccolomessina.backend.repositories.UtenteRepository;
 import niccolomessina.backend.security.JWTTools;
+import niccolomessina.backend.services.CarrelloItemShopService;
 import niccolomessina.backend.services.EmailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,44 +92,5 @@ public class StripeControllerShop {
         return response;
     }
 
-    /*** WEBHOOK STRIPE PER PRODOTTI ***/
-    @PostMapping("/webhook-shop")
-    public ResponseEntity<String> stripeWebhookShop(@RequestBody String payload,
-                                                    @RequestHeader("Stripe-Signature") String sigHeader) {
-        try {
-            Event event = Webhook.constructEvent(payload, sigHeader, stripeWebhookSecret);
-            System.out.println("EVENTO STRIPE SHOP: " + event.getType());
 
-            if ("checkout.session.completed".equals(event.getType())) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(payload);
-
-                String sessionId = root.path("data").path("object").path("id").asText();
-                Session session = Session.retrieve(sessionId);
-
-                String userId = session.getMetadata().get("userId");
-                if (userId == null) {
-                    System.out.println(" Metadata mancante");
-                    return ResponseEntity.ok("No metadata");
-                }
-
-                Utente utente = utenteRepository.findById(UUID.fromString(userId)).orElseThrow();
-
-                // INVIO EMAIL DI CONFERMA
-                emailService.sendEmail(
-                        utente.getEmail(),
-                        "Conferma acquisto prodotti",
-                        "Acquisto completato! Grazie per il tuo ordine."
-                );
-
-                System.out.println("EMAIL INVIATA PER SHOP");
-            }
-
-            return ResponseEntity.ok("Received");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(400).body("Webhook error: " + e.getMessage());
-        }
-    }
 }

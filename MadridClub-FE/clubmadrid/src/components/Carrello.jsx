@@ -181,12 +181,12 @@ const aggiornaItem = (id, quantita, taglia) => {
         <button className="btn btn-warning mb-2" onClick={svuotaCarrello}>
           Svuota Carrello
         </button>
-      </div>
-      
-    )}
     <button className="btn btn-success" onClick={paga}>
   Procedi al pagamento
 </button>
+      </div>
+      
+    )}
   </div>
 );
 }

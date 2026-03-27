@@ -60,52 +60,44 @@ function Calendario() {
   }
 
   return (
-    <div className="container my-3">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <button className="btn  iconaCalendario" onClick={mesePrecedente}>
-          <i className="bi bi-arrow-left-square "></i>
-        </button>
-        <h2>
-          {mesi[mese]} {anno}
-        </h2>
-        <button className="btn  iconaCalendario" onClick={meseSuccessivo}>
-          <i className="bi bi-arrow-right-square "></i>
-        </button>
-      </div>
+    <div className="container my-3 calendario-container">
+  <div className="d-flex justify-content-between align-items-center mb-3">
+    <button className="btn iconaCalendario" onClick={mesePrecedente}>
+      <i className="bi bi-arrow-left-square"></i>
+    </button>
+    <h2>{mesi[mese]} {anno}</h2>
+    <button className="btn iconaCalendario" onClick={meseSuccessivo}>
+      <i className="bi bi-arrow-right-square"></i>
+    </button>
+  </div>
 
-      {/* Giorni settimana */}
-      <div className="row text-center fw-bold d-none d-sm-flex">
-        {["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"].map((d) => (
-          <div key={d} className="col border py-1">
-            {d}
-          </div>
-        ))}
-      </div>
+  {/* Giorni settimana */}
+  <div className="row text-center fw-bold row-giorni d-none d-sm-flex">
+    {["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"].map((d) => (
+      <div key={d} className="col border py-1">{d}</div>
+    ))}
+  </div>
 
-      {/* Celle calendario */}
-      {righe.map((riga, i) => (
-        <div key={i} className="row">
-          {riga.map((cella, j) => (
-            <div key={j} className="col border p-2 celle">
-              {cella && (
-                <>
-                  <div className="fw-bold">{cella.giorno}</div>
-                  {cella.partite.map((p) => (
-                    <div
-                      key={p.id}
-                      className="bg-secondary text-white rounded px-1 my-1 text-center partite"
-                      
-                    >
-                      {p.casa} vs {p.trasferta}
-                    </div>
-                  ))}
-                </>
-              )}
-            </div>
-          ))}
+  {/* Celle calendario */}
+  {righe.map((riga, i) => (
+    <div key={i} className="row row-celle">
+      {riga.map((cella, j) => (
+        <div key={j} className="col border p-2 celle">
+          {cella && (
+            <>
+              <div className="fw-bold">{cella.giorno}</div>
+              {cella.partite.map((p) => (
+                <div key={p.id} className="bg-secondary text-white rounded px-1 my-1 text-center partite">
+                  {p.casa} vs {p.trasferta}
+                </div>
+              ))}
+            </>
+          )}
         </div>
       ))}
     </div>
+  ))}
+</div>
   );
 }
 

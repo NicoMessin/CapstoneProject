@@ -1,15 +1,24 @@
 .celle {
   min-height: 80px;
-  min-width: 0;
+  min-width: 0; 
+  flex: 1 0 0; 
+  word-break: break-word;
 }
 
-.partitestyle {
+.partite {
   font-size: 12px;
   white-space: normal;
   word-break: break-word;
-  
 }
 
-.iconaCalendario{color:  white;
-      background-color: #6b7280;
+.calendario-container {
+  overflow-x: auto; 
+}
+
+.row-giorni, .row-celle {
+  display: flex;
+  flex-wrap: nowrap; 
+}
+
+.iconaCalendario{font-size: 22px;
     }

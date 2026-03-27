@@ -146,7 +146,7 @@ public class StripeControllerTickets {
                 // Conferma acquisto
                 carrelloTicketService.confermaAcquisto(tickets);
 
-                // 👉 INVIO EMAIL
+                //  INVIO EMAIL
                 emailService.sendEmail(
                         utente.getEmail(),
                         "Conferma acquisto biglietti",
