@@ -30,6 +30,7 @@ function FormLogin() {
       localStorage.setItem("token", body.accessToken);
       alert("Login effettuato!");
       navigate("/");
+      window.location.reload();
 
     })
     .catch(() => setError("Errore di connessione"));

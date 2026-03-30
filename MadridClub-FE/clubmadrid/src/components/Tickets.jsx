@@ -97,9 +97,7 @@ function Tickets() {
           throw new Error("Nessun posto disponibile");
         }
 
-        const postoRandom =
-          postiFila[Math.floor(Math.random() * postiFila.length)];
-
+        
         return fetch("http://localhost:3001/carrelloTickets", {
           method: "POST",
           headers: {
@@ -107,14 +105,14 @@ function Tickets() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            ticketId: item.id,
-            enumSettore: "FONDO_SUR",
-            enumFila: filaRandom,
-            enumPosto: postoRandom,
-            nome: "",
-            cognome: "",
-            dataNascita: "2000-01-01",
-          }),
+  ticketId: item.id,
+  enumSettore: "FONDO_SUR",
+  enumFila: `FILA_${Math.floor(Math.random() * 20) + 1}`,
+  enumPosto: "ABCDEFGHIJKLMNOPQR"[Math.floor(Math.random() * 18)],
+  nome: "",
+  cognome: "",
+  dataNascita: "2000-01-01",
+}),
         });
       })
       .then((res) => {
