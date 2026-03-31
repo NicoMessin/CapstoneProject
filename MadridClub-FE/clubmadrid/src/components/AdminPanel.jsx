@@ -11,7 +11,7 @@ return(
 
     <Navbar  bg="dark" variant="dark" className="mb-4">
         <Container>
-          <Navbar.Brand href="#home" ccl>Edit</Navbar.Brand>
+          <Navbar.Brand href="#home" >Edit</Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav className="me-auto">
